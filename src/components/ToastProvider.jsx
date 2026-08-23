@@ -9,7 +9,13 @@ import { useSound } from '../lib/sound.js';
  * Global toast queue — mechanic 1, spec section 5.
  * Rules from spec, enforced here so no caller has to remember them:
  *   - Never show two at once. Queue depth capped at 3, older discarded.
- *   - Hard cap of 8 toasts per session; silently stop after that.
+ *   - Hard cap of 8 toasts per session; silently stop after that — EXCEPT
+ *     the title-screen easter egg (`lateNightWindow`), which is exempt.
+ *     That trigger is a discoverable, repeatable secret gated only by
+ *     finding the one lit window, not a one-shot narrative beat, so it
+ *     must not go quiet just because ordinary toasts (episode opens,
+ *     panel expands, choices, PDF download) already used up the session
+ *     budget — a visitor re-clicking it deserves an answer every time.
  *   - Holds 3.2s, then fades out (250ms in per spec 3.5; fade-out timing
  *     is implementation's own, spec only mandates the hold + fade shape).
  *   - aria-live="polite", flavor-priority only.
@@ -53,7 +59,8 @@ export function ToastProvider({ children }) {
 
   const showToast = useCallback(
     (trigger) => {
-      if (sessionCount.current >= SESSION_CAP) return;
+      const exemptFromCap = trigger === 'lateNightWindow';
+      if (!exemptFromCap && sessionCount.current >= SESSION_CAP) return;
       sessionCount.current += 1;
       const message = pickToastVariant(trigger, sessionCount.current);
       // One integration point covers every toast trigger in the app

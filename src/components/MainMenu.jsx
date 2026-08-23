@@ -22,10 +22,14 @@ import { sounds, useSound } from '../lib/sound.js';
  * Enter/Space handles activation) — a real menu, not decoration.
  *
  * CONTINUE is omitted entirely (not disabled) unless useProgress().hasSave.
- * EXTRAS is the recruiter escape hatch dressed as an in-universe item —
- * it goes straight to /plain, which is where the actual "download PDF"
- * control lives (see screens/PlainResume.jsx; no static PDF asset exists
- * yet, so that control uses window.print()).
+ * PLAIN RESUME (item key 'extras', unchanged — only the label moved) is
+ * the recruiter escape hatch — it goes straight to /plain, which is where
+ * the actual "download PDF" control lives (see screens/PlainResume.jsx;
+ * no static PDF asset exists yet, so that control uses window.print()).
+ * Labeled plainly rather than in-universe ("EXTRAS") because a recruiter
+ * scanning the menu needs to recognize it as the resume without reading
+ * an explanatory line underneath — see the removed orientation-line note
+ * further down this file.
  * OPTIONS expands inline motion/sound/typewriter toggles read/written via
  * useSettings() rather than a separate SettingsTray screen — that
  * component is out of this batch's scope (see src/components/CLAUDE.md).
@@ -72,7 +76,7 @@ export default function MainMenu({ reducedMotion }) {
         }
       : null,
     { key: 'episodes', label: 'EPISODES', action: () => navigate('/chapters') },
-    { key: 'extras', label: 'EXTRAS', action: () => navigate('/plain') },
+    { key: 'extras', label: 'PLAIN RESUME', action: () => navigate('/plain') },
     { key: 'options', label: 'OPTIONS', action: () => setOptionsOpen((open) => !open) },
   ].filter(Boolean);
 
@@ -178,6 +182,12 @@ export default function MainMenu({ reducedMotion }) {
         </ul>
 
         {optionsOpen ? (
+          // Toggle labels use font-display (Alfa Slab One), same as every
+          // item in the <ul> above, not font-body. They read as menu
+          // items — same nav, same interaction model — not as resume
+          // body prose, so tokens.css's "titles only" restriction on the
+          // display face doesn't cover them; Inter here read as a plain
+          // settings row bolted onto an in-universe menu.
           <div
             role="group"
             aria-label="Options"
@@ -186,7 +196,7 @@ export default function MainMenu({ reducedMotion }) {
             <button
               type="button"
               onClick={() => settings.toggle('motion')}
-              className="text-left font-body text-sm uppercase tracking-wide text-bone/80 hover:text-bone"
+              className="text-left font-display text-sm uppercase tracking-normal text-bone/80 hover:text-bone"
             >
               Motion: {settings.motion ? 'On' : 'Off'}
             </button>
@@ -209,32 +219,28 @@ export default function MainMenu({ reducedMotion }) {
                 sounds.select();
                 settings.toggle('sound');
               }}
-              className="text-left font-body text-sm uppercase tracking-wide text-bone/80 hover:text-bone"
+              className="text-left font-display text-sm uppercase tracking-normal text-bone/80 hover:text-bone"
             >
               Sound: {settings.sound ? 'On' : 'Off'}
             </button>
             <button
               type="button"
               onClick={() => settings.toggle('typewriter')}
-              className="text-left font-body text-sm uppercase tracking-wide text-bone/80 hover:text-bone"
+              className="text-left font-display text-sm uppercase tracking-normal text-bone/80 hover:text-bone"
             >
               Typewriter: {settings.typewriter ? 'On' : 'Off'}
             </button>
           </div>
         ) : null}
 
-        {/* Orientation line. Spec's overriding constraint is that a
-            recruiter can get the real information in under 90 seconds
-            without playing along — so the escape hatch has to be
-            *findable*, and "EXTRAS" alone does not advertise itself as
-            "the actual resume". Naming what it is here is worth more than
-            the small loss of in-universe purity. The keyboard hint earns
-            its place for the same reason the menu supports arrow keys at
-            all (spec §2 rule 1: reachable by keyboard alone). */}
+        {/* Keyboard hint. The escape hatch used to need a second line
+            spelling out what EXTRAS was, because "EXTRAS" alone didn't
+            read as "the actual resume" — renaming the item itself to
+            "PLAIN RESUME" (see items[] above) makes that line redundant,
+            so it's gone rather than kept as leftover explanation of a
+            label that no longer needs explaining. */}
         <p className="mt-8 max-w-md font-body text-xs uppercase leading-relaxed tracking-[0.18em] text-bone/45">
           ↑ ↓ to navigate · Enter to select
-          <br />
-          Extras — plain-text resume &amp; PDF, no game required
         </p>
       </nav>
 
