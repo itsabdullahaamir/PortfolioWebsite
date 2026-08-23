@@ -1,0 +1,99 @@
+@import 'tailwindcss';
+@import './styles/tokens.css';
+@import './styles/textures.css';
+@import './styles/motion.css';
+
+/*
+  Tailwind v4 theme mapping. This makes the section 3 tokens usable as
+  Tailwind utilities (bg-ink, text-signal, font-display, etc.) instead of
+  arbitrary-value syntax everywhere. Values point at the CSS custom
+  properties in tokens.css so there is exactly one source of truth.
+*/
+@theme {
+  --color-ink: var(--ink);
+  --color-paper: var(--paper);
+  --color-shadow: var(--shadow);
+  --color-signal: var(--signal);
+  --color-dusk: var(--dusk);
+  --color-bone: var(--bone);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+
+  --text-xs: var(--text-xs);
+  --text-sm: var(--text-sm);
+  --text-base: var(--text-base);
+  --text-lg: var(--text-lg);
+  --text-xl: var(--text-xl);
+  --text-2xl: var(--text-2xl);
+  --text-3xl: var(--text-3xl);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    margin: 0;
+  }
+
+  /* Accessibility floor, spec section 7: visible focus ring, never removed. */
+  :focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+  }
+}
+
+/* Reduced motion floor, spec section 2 rule 5 and section 7. Components
+   must also check useReducedMotion() in JS for anything driven by Framer
+   Motion, but this covers plain CSS transitions/animations globally. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+  Same reduced-motion floor, keyed off a class instead of the media query.
+  A `prefers-reduced-motion: reduce` media query can only ever see the OS
+  setting — it has no way to see the in-app Settings "motion" toggle
+  (src/context/SettingsContext.jsx), and the spec's motion pass (section
+  3.5 / workstream instructions) requires EITHER one to disable motion.
+  src/components/AmbientLayer.jsx syncs this class onto <html> whenever
+  useSettings().motion is false, so every plain-CSS transition in the app
+  (Panel's hover lift, DialogueChoice's hover bar, etc.) honors the
+  in-app toggle the same way it already honors the OS one, without every
+  hover micro-interaction needing to become a JS-driven Framer Motion
+  animation (which would cost more bundle for no visible gain — spec
+  section 7 flags Framer Motion as the biggest bundle risk).
+*/
+html.motion-off *,
+html.motion-off *::before,
+html.motion-off *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}

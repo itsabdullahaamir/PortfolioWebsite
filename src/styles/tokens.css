@@ -1,0 +1,63 @@
+/*
+  Design tokens — spec section 3.1 (palette) and 3.2 (type scale).
+  These are the single source of truth for color and type. Components must
+  reference these custom properties (or the Tailwind theme keys wired to
+  them in index.css) — never hardcode a hex value or a font stack inline.
+*/
+
+/*
+  Self-hosted faces — spec section 3.2 ("both self-hosted as WOFF2 with
+  font-display: swap") and the performance floor in section 7 (Latin
+  subset, preloaded — see index.html). These are the two real files in
+  src/assets/fonts/, wired up here because this is where the --font-display
+  / --font-body stacks below are declared; keeping the @font-face rules
+  next to the stacks that name these families avoids a second source of
+  truth for typography. The stacks keep their fallback names — the real
+  files just mean the browser stops silently falling through to them.
+
+  Alfa Slab One is a single static weight (400), display/titles only per
+  spec 3.2 ("episode titles, the name on the title card, and the chapter
+  numbers only") — never used for body copy.
+
+  Inter is shipped as a single variable-weight file, so one @font-face
+  with `font-weight: 100 900` covers the whole range instead of one rule
+  per weight.
+*/
+@font-face {
+  font-family: 'Alfa Slab One';
+  src: url('../assets/fonts/alfa-slab-one-latin-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../assets/fonts/inter-latin-var.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* 3.1 Palette */
+  --ink: #141210;
+  --paper: #d8cfc0;
+  --shadow: #3b342e;
+  --signal: #c4321e;
+  --dusk: #2a3742;
+  --bone: #efe7d8;
+
+  /* 3.2 Typography */
+  --font-display: 'Alfa Slab One', 'Oswald', 'Archivo Black', sans-serif;
+  --font-body: 'Inter', 'Source Sans 3', 'Public Sans', sans-serif;
+
+  /* Type scale (rem, 16px base) — spec section 3.2 */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2.5rem;
+  --text-3xl: 4rem;
+}

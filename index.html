@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Abdullah Aamir — a resume, sort of</title>
+    <!--
+      GitHub Pages serves this as a project site with no server-side
+      rewrites, so a direct load of a client-routed path (e.g. /chapters)
+      would 404. public/404.html catches that 404, re-encodes the path
+      into a query string, and redirects back to this document; this
+      script decodes it and restores the real URL via history.replaceState
+      before React Router ever mounts. No-op on every other host. See
+      public/CLAUDE.md.
+    -->
+    <script>
+      (function () {
+        var l = window.location;
+        if (l.search[1] === '/') {
+          var decoded = l.search
+            .slice(1)
+            .split('&')
+            .map(function (s) {
+              return s.replace(/~and~/g, '&');
+            })
+            .join('?');
+          window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash);
+        }
+      })();
+    </script>
+    <!--
+      Font preloads — performance floor, spec section 7 ("Fonts: Latin-subset
+      WOFF2, preloaded"). Relative hrefs so Vite's HTML asset pipeline
+      resolves and hashes them the same way it does the url() references in
+      src/styles/tokens.css, instead of pointing at an unhashed /src path
+      that only exists in dev. Verified against dist/index.html after build.
+    -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="./src/assets/fonts/alfa-slab-one-latin-400.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="./src/assets/fonts/inter-latin-var.woff2"
+      crossorigin
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

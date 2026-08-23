@@ -1,0 +1,42 @@
+/*
+  Texture layers — spec section 3.3 (panel halftone) and mechanic 5 (film grain).
+  Inline SVG data URIs only, per the performance floor in section 7
+  ("textures as inline SVG data URIs, not image files").
+*/
+
+/* Halftone dot texture for panel interiors. Keep opacity 4-8% (spec 3.3). */
+.texture-halftone {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Ccircle cx='2' cy='2' r='1' fill='%23141210'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  opacity: 0.06;
+}
+
+/*
+  Film grain overlay — mechanic 5 (spec section 5), one of the two chosen
+  ambient details. 3% opacity, animated at ~8fps via a steps() timing
+  function shifting background-position (not opacity/transform, so it
+  reads as flicker rather than drift). Mounted as a fixed full-viewport
+  layer by src/components/AmbientLayer.jsx, which is also the thing that
+  decides whether it renders at all — disabled outright under reduced
+  motion, per spec section 2 rule 5, rather than just freezing the frame.
+*/
+.texture-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+/* 8fps flicker: 8 discrete background-position steps per second, looping. */
+@keyframes grain-shift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 120px 90px;
+  }
+}
+
+.texture-grain-animate {
+  animation: grain-shift 1s steps(8) infinite;
+}

@@ -1,0 +1,100 @@
+/*
+  Keyframes for TitleBackdrop.jsx's ambient/interactive scene layers —
+  click-spawned embers, the lone-lit-window easter egg's glow, drifting
+  fog, and window flicker. Kept separate from tokens.css
+  (palette/type scale) and textures.css (static SVG data-URI patterns)
+  since these are animation timelines, not visual tokens. Color values
+  reference spec 3.1 tokens via var() where used — nothing here
+  introduces a new hex value.
+
+  TitleBackdrop.jsx is responsible for never triggering these under
+  reduced motion (OS `prefers-reduced-motion` OR the in-app Settings
+  toggle) — it gates every animated element itself rather than relying
+  on the global reduced-motion CSS floor in index.css, since some of
+  these (the wandering figure, the easter egg) should not render at all
+  under reduced motion, not just freeze mid-pose.
+*/
+
+/*
+  The easter-egg window's halo. Deliberately a slow *breath* rather than
+  the `window-flicker` used by every other lit pane: the other windows
+  are stairwells and corridors, this one is a person still working, and
+  a steady-but-alive glow is what separates it from the noise. It is
+  also the only cue that the pane is interactive, so it must never go
+  fully dark the way flicker does.
+
+  Two earlier title-screen keyframes were removed rather than kept
+  around unused — `figure-walk` (a silhouette sliding edge-to-edge on a
+  timer, which read as an amateur animated GIF over the art) and
+  `figure-sway` plus `shooting-star` (the rooftop figure and the
+  3-click easter egg it belonged to, both replaced by the solo window).
+  See ../components/CLAUDE.md for the full reasoning.
+*/
+@keyframes solo-glow {
+  0%,
+  100% {
+    opacity: 0.42;
+  }
+  50% {
+    opacity: 0.72;
+  }
+}
+
+@keyframes ember-rise {
+  0% {
+    opacity: 0.9;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--ember-dx, 0px), -60px) scale(0.4);
+  }
+}
+
+@keyframes fog-drift {
+  from {
+    transform: translateX(-10%);
+  }
+  to {
+    transform: translateX(10%);
+  }
+}
+
+@keyframes window-flicker {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  40% {
+    opacity: 0.75;
+  }
+  55% {
+    opacity: 0.4;
+  }
+  70% {
+    opacity: 0.8;
+  }
+}
+
+/*
+  StartPrompt.jsx's "PRESS START"-style blinking cue — the new beat-0
+  gate ahead of the opening sequence (see components/CLAUDE.md and
+  screens/CLAUDE.md's TitleScreen.jsx entry for why it exists: it's the
+  explicit click that unlocks Web Audio, replacing a hope that an
+  incidental click happens early enough during beats 1-2). A steady
+  on/off blink, not a fade — old arcade "PRESS START" prompts hard-cut
+  rather than ease, and that's the specific reference being chased here.
+  Gated off under reduced motion by the component itself (same pattern
+  as every other animation in this file), which shows the text at full
+  opacity, static, rather than mid-blink.
+*/
+@keyframes prompt-blink {
+  0%,
+  60% {
+    opacity: 1;
+  }
+  61%,
+  100% {
+    opacity: 0.25;
+  }
+}
