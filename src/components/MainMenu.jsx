@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProgress } from '../context/ProgressContext.jsx';
 import { useSettings } from '../context/SettingsContext.jsx';
+import { useMusic } from '../context/MusicContext.jsx';
 import TitleBackdrop from './TitleBackdrop.jsx';
 import { profile } from '../data/profile.js';
 import { sounds, useSound } from '../lib/sound.js';
@@ -43,6 +44,7 @@ export default function MainMenu({ reducedMotion }) {
   const navigate = useNavigate();
   const { hasSave, lastEpisodeId } = useProgress();
   const settings = useSettings();
+  const { previous: previousTrack, next: nextTrack, hasPrevious, hasMultipleTracks } = useMusic();
   const [optionsOpen, setOptionsOpen] = useState(false);
   const [selected, setSelected] = useState(0);
   const [visible, setVisible] = useState(!!reducedMotion);
@@ -80,10 +82,53 @@ export default function MainMenu({ reducedMotion }) {
     { key: 'options', label: 'OPTIONS', action: () => setOptionsOpen((open) => !open) },
   ].filter(Boolean);
 
-  // Reached by arrow-key navigation (handleKeyDown below).
+  // The OPTIONS toggles, as roving-focus nav items in their own right —
+  // each `action` is exactly what its button's onClick already ran before
+  // this change (e.g. Sound plays `sounds.select()` unconditionally, the
+  // others don't), so wiring these into keyboard Enter activation below
+  // doesn't change what clicking each control does, only what Up/Down can
+  // now reach. Defined every render (cheap, mirrors `items` above) so it
+  // always reflects live settings/track state.
+  const optionControls = [
+    { key: 'motion', label: `Motion: ${settings.motion ? 'On' : 'Off'}`, action: () => settings.toggle('motion') },
+    {
+      key: 'sound',
+      label: `Sound: ${settings.sound ? 'On' : 'Off'}`,
+      action: () => {
+        sounds.select();
+        settings.toggle('sound');
+      },
+    },
+    { key: 'music', label: `Music: ${settings.music ? 'On' : 'Off'}`, action: () => settings.toggle('music') },
+    ...(hasMultipleTracks
+      ? [
+          { key: 'previous-track', label: '◂ Previous Track', action: previousTrack, disabled: !hasPrevious },
+          { key: 'next-track', label: 'Next Track ▸', action: nextTrack },
+        ]
+      : []),
+    {
+      key: 'typewriter',
+      label: `Typewriter: ${settings.typewriter ? 'On' : 'Off'}`,
+      action: () => settings.toggle('typewriter'),
+    },
+  ];
+
+  // The full roving-focus list: the 5 top items, plus (only while the
+  // panel is expanded) the OPTIONS toggles appended after them. This is
+  // what fixes arrow-key nav stopping at the top 5 items when OPTIONS was
+  // open — `selected` now indexes into this combined list, not `items`.
+  const navItems = optionsOpen ? [...items, ...optionControls] : items;
+
+  // Reached by arrow-key navigation (the window keydown listener below).
+  // Deliberately does NOT call itemRefs.current[clamped]?.focus() — doing
+  // so put a --signal focus ring around whichever item arrow keys landed
+  // on, which is the exact bug the removed mount-time auto-focus (see the
+  // comment above `items`) was fixed to avoid, just re-triggered on every
+  // arrow press instead of only on load. Selection is pure React state
+  // (`selected`), which already drives the `▸` marker below — no DOM
+  // focus is needed for arrow nav to work or to be visible.
   const focusIndex = (index) => {
-    const clamped = (index + items.length) % items.length;
-    itemRefs.current[clamped]?.focus();
+    const clamped = (index + navItems.length) % navItems.length;
     setSelected(clamped);
     playSound('navigate');
   };
@@ -96,15 +141,52 @@ export default function MainMenu({ reducedMotion }) {
     setSelected(index);
   };
 
-  const handleKeyDown = (event, index) => {
-    if (event.key === 'ArrowDown') {
-      event.preventDefault();
-      focusIndex(index + 1);
-    } else if (event.key === 'ArrowUp') {
-      event.preventDefault();
-      focusIndex(index - 1);
+  // Window-level, not per-button: arrow keys must work the instant the
+  // menu is on screen, without requiring a prior Tab press to put DOM
+  // focus on a button first. Enter/Space still activate via the native
+  // <button> itself when a button does have focus, so this only adds a
+  // path for the (much more common) case where nothing is focused yet.
+  useEffect(() => {
+    const onWindowKeyDown = (event) => {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        focusIndex(selected + 1);
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        focusIndex(selected - 1);
+      } else if (event.key === 'Escape' && optionsOpen) {
+        // Back out of the OPTIONS sub-panel before the global
+        // `EscapeBack.jsx` handler would consider `/` (it no-ops there).
+        event.preventDefault();
+        setOptionsOpen(false);
+      } else if (event.key === 'Enter' && document.activeElement?.tagName !== 'BUTTON') {
+        event.preventDefault();
+        // Only the top-level items get the unconditional `select` cue
+        // here — matches each button's own onClick (an OPTIONS toggle's
+        // action already plays whatever sound it needs, e.g. Sound's
+        // does, Motion's doesn't; duplicating `select` on top of that
+        // would make Enter sound different from a click on the same
+        // control).
+        if (selected < items.length) playSound('select');
+        navItems[selected]?.action();
+      }
+    };
+    window.addEventListener('keydown', onWindowKeyDown);
+    return () => window.removeEventListener('keydown', onWindowKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected, navItems.length, items.length, optionsOpen]);
+
+  // If OPTIONS gets closed (via click or Enter) while selection was
+  // sitting on one of the option toggles, `selected` would otherwise
+  // point past the end of the now-shorter `items`-only list. Snap back to
+  // the OPTIONS item itself (always last in `items`) rather than leaving
+  // a stale out-of-range index with no visible `▸` marker.
+  useEffect(() => {
+    if (!optionsOpen) {
+      setSelected((current) => (current >= items.length ? items.length - 1 : current));
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [optionsOpen]);
 
   return (
     <div
@@ -167,7 +249,6 @@ export default function MainMenu({ reducedMotion }) {
                 }}
                 onFocus={() => setSelected(index)}
                 onMouseEnter={() => hoverIndex(index)}
-                onKeyDown={(event) => handleKeyDown(event, index)}
                 className={`flex items-center gap-2 border-none bg-transparent py-1 text-left font-display text-lg uppercase tracking-wide transition-transform duration-[120ms] ease-out ${
                   selected === index ? 'translate-x-2 text-bone' : 'text-bone/60'
                 }`}
@@ -188,48 +269,44 @@ export default function MainMenu({ reducedMotion }) {
           // body prose, so tokens.css's "titles only" restriction on the
           // display face doesn't cover them; Inter here read as a plain
           // settings row bolted onto an in-universe menu.
+          //
+          // Rendered from `optionControls` (defined above, alongside
+          // `items`) instead of five hand-written buttons, so each row
+          // can carry its own combined index into `navItems` and take
+          // part in the same Up/Down roving-focus loop as NEW GAME /
+          // EPISODES / etc. — previously these toggles had no index at
+          // all, so arrow keys could never reach them once the panel was
+          // open (they'd just keep cycling the 5 top-level items).
           <div
             role="group"
             aria-label="Options"
             className="pointer-events-auto mt-4 flex flex-col gap-2 border-l-2 border-bone/30 pl-4"
           >
-            <button
-              type="button"
-              onClick={() => settings.toggle('motion')}
-              className="text-left font-display text-sm uppercase tracking-normal text-bone/80 hover:text-bone"
-            >
-              Motion: {settings.motion ? 'On' : 'Off'}
-            </button>
-            {/* SOUND is back: ../lib/sound.js synthesizes short UI blips
-                with the Web Audio API (menu navigate/select, the memory
-                toast) rather than needing shipped audio files, so this
-                toggle now actually gates something. Clicking it plays
-                `sounds.select()` UNCONDITIONALLY — the one deliberate
-                exception to routing everything through `playSound()` —
-                specifically so turning sound ON gets an immediate
-                audible answer instead of silence until the next
-                unrelated action. `settings.sound` still defaults to
-                false (spec's "never autoplay" rule), and creating the
-                AudioContext requires this very click as its first user
-                gesture, so nothing can play before this button is
-                pressed at least once. */}
-            <button
-              type="button"
-              onClick={() => {
-                sounds.select();
-                settings.toggle('sound');
-              }}
-              className="text-left font-display text-sm uppercase tracking-normal text-bone/80 hover:text-bone"
-            >
-              Sound: {settings.sound ? 'On' : 'Off'}
-            </button>
-            <button
-              type="button"
-              onClick={() => settings.toggle('typewriter')}
-              className="text-left font-display text-sm uppercase tracking-normal text-bone/80 hover:text-bone"
-            >
-              Typewriter: {settings.typewriter ? 'On' : 'Off'}
-            </button>
+            {optionControls.map((control, i) => {
+              const combinedIndex = items.length + i;
+              const isSelected = selected === combinedIndex;
+              return (
+                <button
+                  key={control.key}
+                  type="button"
+                  disabled={control.disabled}
+                  onClick={() => {
+                    setSelected(combinedIndex);
+                    control.action();
+                  }}
+                  onFocus={() => setSelected(combinedIndex)}
+                  onMouseEnter={() => hoverIndex(combinedIndex)}
+                  className={`flex items-center gap-2 border-none bg-transparent text-left font-display text-sm uppercase tracking-normal transition-transform duration-[120ms] ease-out disabled:cursor-default disabled:text-bone/30 disabled:hover:text-bone/30 ${
+                    isSelected ? 'translate-x-2 text-bone' : 'text-bone/80 hover:text-bone'
+                  }`}
+                >
+                  <span className="inline-block w-3" aria-hidden="true">
+                    {isSelected ? <span className="text-signal">▸</span> : null}
+                  </span>
+                  {control.label}
+                </button>
+              );
+            })}
           </div>
         ) : null}
 

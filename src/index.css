@@ -40,6 +40,17 @@
     height: 100%;
   }
 
+  /* Reserve the scrollbar gutter permanently. `PageTransition.jsx`'s
+     route dolly makes the outgoing/incoming screen `position: fixed`
+     while it animates, which empties the document's flow and takes the
+     scrollbar with it — without a reserved gutter the whole page would
+     jump sideways by the scrollbar's width at the start and end of every
+     transition. Also removes the same jump between naturally short and
+     long screens (the title screen vs. `/plain`). */
+  html {
+    scrollbar-gutter: stable;
+  }
+
   body {
     background: var(--paper);
     color: var(--ink);
@@ -96,4 +107,164 @@ html.motion-off *::after {
   animation-iteration-count: 1 !important;
   transition-duration: 0.01ms !important;
   scroll-behavior: auto !important;
+}
+
+/*
+  Hide a scroll container's native scrollbar without disabling scrolling.
+  Used by `ChapterSelect.jsx`'s episode filmstrip: a raw OS scrollbar sat
+  under that row and read as a stray browser control bolted to the art
+  (reported live as "the scroll wheel below the chapters looks bad"). The
+  row is still fully scrollable by wheel, trackpad, touch, and keyboard —
+  it also has explicit ◂ ▸ stepper buttons and Left/Right arrow-key
+  support, so hiding the bar removes a bad affordance rather than the
+  only one. Do not apply this to anything whose only scroll affordance is
+  the bar itself.
+*/
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/*
+  Performance, not preference — the two rules below exist purely to make
+  components/PageTransition.jsx's route dolly cheap to render, and are
+  applied/removed by that component alone.
+
+  The screen being zoomed is not a flat image. The main menu alone is
+  ~1,450 SVG <rect>s (TitleBackdrop.jsx's four parallax planes and their
+  per-building window grids) plus three feGaussianBlur window-glow
+  filters, and a browser re-rasterizes vector content whenever the scale
+  it is drawn at changes — i.e. on EVERY frame of a zoom, unless the
+  subtree has been promoted to its own compositor layer first. That was
+  the reported lag.
+
+  `.route-stage` is the promotion hint. With it, the scene is rasterized
+  once into a GPU texture and the zoom becomes a texture transform, which
+  the compositor does essentially for free. It is deliberately NOT left
+  on the wrapper at rest — an always-promoted full-viewport layer costs
+  real GPU memory for nothing, which is why PageTransition.jsx only
+  attaches this class while a transition is actually moving. `contain:
+  paint` is free alongside the `overflow-hidden` that is already there
+  and lets the browser skip painting anything that lands outside the
+  frame as the scene grows past it.
+
+  `html.route-moving` is what makes that promotion actually pay off.
+  Promoting a layer only helps while its contents hold still; several
+  animations inside the scene (window-flicker and solo-glow animate SVG
+  opacity, fog-drift animates an SVG transform, and the film grain
+  animates background-position across the whole viewport) repaint
+  continuously, and any repaint inside a promoted layer forces it to
+  re-rasterize — which would put the per-frame cost straight back. So
+  for the ~1s the camera is moving, decorative CSS animation is paused.
+  `animation-play-state` rather than the `motion-off` block's
+  duration-zeroing above, because these are meant to resume exactly where
+  they left off the moment the move ends, not to be cancelled. This is
+  invisible to Framer Motion: it drives the transition itself through
+  inline styles and the Web Animations API, neither of which
+  `animation-play-state` touches.
+*/
+.route-stage {
+  will-change: transform, opacity;
+  contain: paint;
+}
+
+html.route-moving *,
+html.route-moving *::before,
+html.route-moving *::after {
+  animation-play-state: paused !important;
+}
+
+/*
+  Print stylesheet — spec section 2 rule 3's escape hatch. screens/
+  PlainResume.jsx wires "Download / print" (and a bare browser Ctrl+P,
+  via the beforeprint/afterprint listeners in that file) to
+  window.print(); no static PDF file exists in public/, so this block IS
+  the PDF output a recruiter actually gets. Everything is scoped under
+  `.dossier` (the root class on that screen's <main>) so it can never
+  leak onto the three game screens, which carry no print styling of
+  their own and shouldn't inherit any by accident later.
+
+  The one deliberate exception is `.texture-grain` just below, which is
+  NOT scoped to `.dossier` — it's mounted by components/AmbientLayer.jsx
+  as a `position: fixed` sibling of every screen, App.jsx-level, not a
+  descendant of `.dossier` at all, so a `.dossier *` rule can't reach it.
+  A fixed full-viewport noise layer has no reason to appear on ANY
+  printed page in this app, not just this one, so it's suppressed
+  globally rather than duplicating the rule per screen later.
+*/
+@media print {
+  .texture-grain {
+    display: none !important;
+  }
+
+  .dossier {
+    background: #fff !important;
+    color: #000 !important;
+    min-height: 0 !important;
+  }
+
+  .dossier * {
+    background: transparent !important;
+    color: #000 !important;
+    border-color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Force single column — the two-column [16rem_1fr] desktop grid has no
+     meaning on paper, and a sticky rail printed at a fixed width would
+     just steal margin from the content column on every page. */
+  .dossier .dossier-grid {
+    display: block !important;
+  }
+
+  .dossier aside {
+    position: static !important;
+  }
+
+  /* Interactive chrome that means nothing once the page is on paper: the
+     section rail / mobile chip bar (one element, see PlainResume.jsx's
+     doc comment), the filter + expand/collapse control bar, the "Showing
+     N of M" count line, the Download button, and the back-to-app link. */
+  .dossier .dossier-chrome {
+    display: none !important;
+  }
+
+  /* Belt and braces alongside PlainResume.jsx's own `printing` state
+     (which sets every <details open> before calling window.print()):
+     a bare OS/browser Ctrl+P fires `beforeprint` synchronously, and
+     React's state update in that handler should have committed before
+     the browser paints the print output, but there is no hard guarantee
+     of that ordering across every browser — so the body content stays
+     visible here regardless of the `open` attribute, and the UA marker
+     triangle is hidden either way since DossierEntry.jsx's own ▸/▾
+     glyph already communicates state on screen and means nothing once
+     printed. */
+  .dossier details > summary {
+    list-style: none;
+  }
+
+  .dossier details > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .dossier details > div {
+    display: block !important;
+  }
+
+  .dossier details {
+    break-inside: avoid;
+  }
+
+  /* Print the destination after external links within the dossier only
+     — a printed page can't be clicked, so the URL itself is the only
+     way the information survives onto paper. */
+  .dossier a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.7em;
+  }
 }

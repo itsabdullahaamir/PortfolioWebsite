@@ -14,13 +14,28 @@ const BASE_CONFIDENCE = 20;
 
 const ProgressContext = createContext(null);
 
+// Episode ids have been renamed more than once as episodes.js was
+// reorganized (chronology -> category, then a further content pass).
+// A visitor whose localStorage predates one of those renames can be
+// carrying stale ids that no longer match anything in the current
+// `episodes` array. Reconciling against the live id set here — rather
+// than trusting whatever length localStorage reports — is what stops
+// visited.length from ever exceeding episodes.length (previously
+// visible live as "10 of 5 viewed" on ChapterSelect.jsx).
+const VALID_IDS = new Set(episodes.map((ep) => ep.id));
+
+function sanitizeVisited(visited) {
+  if (!Array.isArray(visited)) return [];
+  return visited.filter((id) => VALID_IDS.has(id));
+}
+
 function loadProgress() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return { visited: [], lastEpisodeId: null };
     const parsed = JSON.parse(raw);
     return {
-      visited: Array.isArray(parsed.visited) ? parsed.visited : [],
+      visited: sanitizeVisited(parsed.visited),
       lastEpisodeId: parsed.lastEpisodeId ?? null,
     };
   } catch {
@@ -36,6 +51,7 @@ export function ProgressProvider({ children }) {
   }, [progress]);
 
   const visitEpisode = useCallback((episodeId) => {
+    if (!VALID_IDS.has(episodeId)) return;
     setProgress((prev) => {
       const visited = prev.visited.includes(episodeId)
         ? prev.visited

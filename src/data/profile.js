@@ -13,13 +13,45 @@
  *
  * Nothing in this file is themed or game-flavored — it is plain resume
  * prose on purpose, because its only consumer is the plain document.
+ *
+ * `highlights` (new, the `/plain` Dossier rebuild): four numbers for the
+ * "10-second band" at the top of the document — the stat row a recruiter
+ * sees before reading a single sentence of prose. These are facts that
+ * already exist elsewhere in this file (rank/CGPA in `education[]`, TA
+ * course count derivable from `experience[]`, hackathon placements in
+ * `awards[]`) restated as short display-face values rather than a new
+ * source of truth, so PlainResume.jsx never hardcodes a number in JSX —
+ * per the standing "no component may hardcode copy" rule, a stat number
+ * is copy too.
  */
 
 export const profile = {
   name: 'Abdullah Aamir',
+
+  // Headshot for the /plain Dossier's identity block. A bare filename in
+  // `public/` — PlainResume.jsx resolves it against import.meta.env.BASE_URL
+  // (so it works under the GitHub Pages `/PortfolioWebsite/` subpath) and
+  // hides the frame entirely if the file is missing, same
+  // graceful-degradation pattern as the not-yet-drawn episode cover art.
+  // Set to null to remove the photo without touching the component.
+  photo: 'portrait.jpg',
+
   headline: 'President @ Meri Kahani (FOES) · CS @ FAST ’28',
   summary:
-    'Computer Science undergraduate at FAST-NUCES, ranked first in a cohort of 313. Works mostly on graph machine learning, entity resolution, and things that have to keep working offline. Teaches four courses as a TA and builds under hackathon time pressure for fun.',
+    'Computer Science undergraduate at FAST-NUCES, ranked first in a cohort of 313 on a 3.96 CGPA. Research assistant on an HEC-funded project linking disease incidence to weather and disaster patterns in Pakistan, teaching assistant across four courses, and a two-time hackathon runner-up. Works mostly on graph machine learning, entity resolution, and software that has to keep working offline.',
+
+  highlights: [
+    // '#1' rather than '1 / 313': at 375px the tile gives the value 130px
+    // of content width, and '1 / 313' in the 40px display face needs more
+    // than that, so it wrapped to two lines and rendered the first tile
+    // 107px tall against 53px for the other three — a visibly ragged row.
+    // The denominator moves into the label, which is small enough to fit
+    // on one line. Same fact, no information lost.
+    { value: '#1', label: 'Of 313 in cohort' },
+    { value: '3.96', label: 'CGPA · 73 credits' },
+    { value: '4', label: 'Courses TA’d' },
+    { value: '2×', label: 'Hackathon runner-up' },
+  ],
 
   contact: {
     email: 'i240574@isb.nu.edu.pk',
@@ -36,15 +68,16 @@ export const profile = {
       institution: 'FAST-NUCES, Islamabad',
       timespan: 'Aug 2024 — 2028 (expected)',
       detail:
-        'Cumulative CGPA 3.96/4.00, ranked 1st in a cohort of 313. Perfect 4.00 SGPA in Fall 2025 (Rector’s List). 73 credit hours as of Spring 2026.',
+        'Cumulative CGPA 3.96/4.00, ranked 1st in a cohort of 313. Perfect 4.00 SGPA in Fall 2025 (Rector’s List). 73 credit hours as of Spring 2026; currently in the fifth semester.',
       coursework:
-        'Artificial Intelligence (A+), Software Design & Analysis (A+), Theory of Automata (A+), Discrete Structures (A+), Computer Organization & Assembly Language (A), Data Structures (A), Operating Systems (A), Linear Algebra (A), Probability & Statistics (A), Database Systems (A−).',
+        'Artificial Intelligence (A+), Software Design & Analysis (A+), Theory of Automata (A+), Discrete Structures (A+), Computer Organization & Assembly Language (A), Data Structures (A), Operating Systems (A), Linear Algebra (A), Probability & Statistics (A), Database Systems (A−). In progress (Fall 2026): Design & Analysis of Algorithms, Computer Networks, Computer Architecture, Applied Human-Computer Interaction, Technical & Business Writing.',
     },
     {
       credential: 'A Levels',
       institution: 'The Science School, Islamabad',
       timespan: 'Jul 2022 — May 2024',
-      detail: '1 A*, 2 A. Finalist, PakCrypt 2023. Founded the "Badlao" welfare society.',
+      detail:
+        '1 A*, 2 A. Finalist, PakCrypt 2023. Founded the "Badlao" welfare society. Head of Administration for the school bonfire; administration and announcements for the sports gala and an earthquake-relief bake sale.',
       coursework: null,
     },
     {
@@ -61,17 +94,38 @@ export const profile = {
     { group: 'Languages', items: ['Python', 'C++', 'SQL (Cypher/Neo4j)', 'x86 Assembly', 'Dart', 'LaTeX'] },
     {
       group: 'ML & Data Science',
-      items: ['scikit-learn', 'Entity resolution', 'Classification', 'PU learning', 'RAG', 'Agents', 'Statistical analysis'],
+      items: [
+        'scikit-learn',
+        'Entity resolution',
+        'Classification',
+        'Feature extraction',
+        'PU learning',
+        'RAG',
+        'Agents',
+        'Statistical analysis',
+      ],
     },
     {
       group: 'Graph & Spatial',
-      items: ['Neo4j GDS', 'PageRank', 'Community detection', 'Centrality measures', 'Knowledge graphs', 'Spatial modeling'],
+      items: [
+        'Neo4j GDS',
+        'PageRank',
+        'Community detection',
+        'Centrality measures',
+        'Knowledge graphs',
+        'Link prediction',
+        'Spatial modeling',
+      ],
     },
     {
       group: 'Foundations',
       items: ['Linear algebra', 'Probability & statistics', 'Graph theory', 'Algorithm analysis'],
     },
-    { group: 'Tools', items: ['Linux', 'Git', 'FastAPI', 'Flask', 'Flutter', 'Jupyter'] },
+    { group: 'Tools', items: ['Linux', 'Git', 'FastAPI', 'Flask', 'Flutter', 'Jupyter', 'SQLite'] },
+    {
+      group: 'Other',
+      items: ['Event management', 'HR operations', 'Community management', 'Public speaking', 'Technical writing'],
+    },
   ],
 
   awards: [
@@ -80,6 +134,7 @@ export const profile = {
     'Silver Medal, Spring 2025 — top academic performance.',
     '2nd place, HackSummer’26 (Microsoft Club & Canva Student Community, GIKI).',
     '2nd place and national finalist (top 10 in Pakistan), atomcamp National AI Hackathon ’26.',
+    'Runners-up, Promptopia ’26 — generative-AI competition, Google Developer Groups, FAST-NUCES.',
     '2nd Best Delegate, AIESEC Islamabad Youth Speak Forum ’25.',
     'Finalist, PakCrypt Amateur Round 2023 (NCCS, Air University Islamabad).',
   ],
@@ -90,14 +145,21 @@ export const profile = {
       org: 'Parallel Computing Networks Lab, FAST-NUCES',
       timespan: 'Jul 2026 — Present',
       detail:
-        'Knowledge graph construction and relational data modeling; graph connectivity patterns and link prediction for large-scale networked datasets. Co-authoring an unpublished paper on image-processing methods for visual data analysis and feature extraction with a faculty advisor.',
+        'Working on CHIP, an HEC-funded project investigating the relationship between disease incidence and weather and natural-disaster patterns in Pakistan. Sourcing and cleaning sparse, poorly documented national health and climate data, constructing a knowledge graph over it, and training a disease-prediction model on that structure.',
+    },
+    {
+      role: 'Research Collaborator — Image Processing',
+      org: 'FAST-NUCES, with a faculty advisor',
+      timespan: '2026 — Present',
+      detail:
+        'Early-stage research using medical image analysis and feature-extraction techniques to identify why knee surgeries fail. Scope and individual contribution are still being defined.',
     },
     {
       role: 'Teaching Assistant',
       org: 'Department of Computer Science, FAST-NUCES',
       timespan: 'Aug 2025 — Present',
       detail:
-        'TA for Linear Algebra, Object Oriented Programming, Discrete Structures, and Programming Fundamentals. Led tutorials on recursion, graph traversals, and memory management for 100+ students; designed and graded technical assessments.',
+        'TA for Linear Algebra (Aug 2026 — present); previously Object Oriented Programming and Discrete Structures (Jan — Jun 2026) and Programming Fundamentals (Aug — Dec 2025). Led tutorials on recursion, graph traversals, and memory management for 100+ students; designed and graded technical assessments.',
     },
     {
       role: 'President (prev. Social Media Team)',
@@ -110,7 +172,7 @@ export const profile = {
       org: 'NaSCon, FAST-NUCES',
       timespan: 'Feb 2026 — Present',
       detail:
-        'Event Head for Speed Programming and, before it, C++ FaceOff at Pakistan’s largest student-run computing competition.',
+        'Event Head for Speed Programming and, before it, C++ FaceOff at Pakistan’s largest student-run computing competition. Set the problem sets and rules, briefed the volunteer panel, coordinated with sponsors and judges, and ran both rounds on competition day.',
     },
     {
       role: 'Director of Human Resources',
@@ -123,20 +185,22 @@ export const profile = {
       role: 'Media & Marketing Executive',
       org: 'TEDxFASTIslamabad',
       timespan: 'Dec 2025 — Feb 2026',
-      detail: 'Media and marketing for the event.',
+      detail:
+        'Ran social and print promotion on the media and marketing team — content calendar, speaker-announcement graphics, and day-of coverage — in the run-up to the event.',
     },
     {
       role: 'Discord Server Administrator, then Content Coordination Intern',
       org: 'ProSports',
       timespan: 'Jul 2024 — Present',
       detail:
-        'Moderated user-generated content and enforced community guidelines; mediated disputes; organized community events including a PSL Predictor Challenge; relayed user feedback into UX suggestions.',
+        'Discord server administrator since Jul 2024; content coordination intern Jun — Sep 2025. Moderated user-generated content and enforced community guidelines; mediated disputes; organized community events including a PSL Predictor Challenge; relayed user feedback into UX suggestions.',
     },
     {
       role: 'Buddy Program Teacher',
       org: 'FAST Computing Society',
       timespan: 'Oct 2025 — Jun 2026',
-      detail: 'Peer-taught previously studied CS courses to current students.',
+      detail:
+        'Paired with junior students to re-teach CS courses already passed — weekly problem sessions on programming fundamentals and data structures, plus exam-prep walkthroughs.',
     },
   ],
 
@@ -144,24 +208,19 @@ export const profile = {
     {
       name: 'Economic Price Similarity Network Analysis',
       detail:
-        'Modeled nationwide market connectivity using graph centrality on CPI data across Pakistani cities to surface non-linear spatial patterns, with a visualization interface for temporal geographic shifts.',
+        'Modeled inter-city market connectivity from Pakistani CPI data as a graph, ranking cities by betweenness, closeness, and eigenvector centrality. Python, NetworkX, pandas.',
       url: null,
     },
     {
-      name: 'CityMind — AI City Management System',
+      name: 'Governance Crisis — group research report',
       detail:
-        'Applied course search algorithms from optimal city design through to real-time route re-routing over an evolving search space.',
-      url: null,
-    },
-    {
-      name: 'PocketMunshi landing page',
-      detail:
-        'Static single-page site styled as a paper ledger. Vanilla HTML/CSS/JS, no build step, deployed on Cloudflare Pages. Fluid clamp() sizing, honors prefers-reduced-motion, semantic landmarks and lang/dir attributes on Urdu text.',
+        'A 21-page report on the governance crisis caused by weak bureaucracy under corruption and political interference.',
       url: null,
     },
     {
       name: 'Cricnalize',
-      detail: 'Early-stage automated, real-time cricket analytics.',
+      detail:
+        'Early-stage tool for automated, real-time cricket analytics — ball-by-ball ingestion feeding running win-probability and player-form estimates. Prototype stage.',
       url: null,
     },
     {
@@ -197,13 +256,22 @@ export const profile = {
       role: 'Volunteer',
       org: 'Code for Pakistan Hackathon',
       timespan: '2026',
-      detail: 'Event operations support alongside a seven-person crew.',
+      detail:
+        'Event operations on a seven-person crew across the civic-tech hackathon — participant check-in, team logistics, and mentor scheduling over the weekend.',
+    },
+    {
+      role: 'Panelist',
+      org: 'Help 4 Help university applications webinar',
+      timespan: '2024',
+      detail:
+        'Panelist on a student-run webinar for university applicants — walked through program selection, the FAST admission test, and scholarship options, then took live questions.',
     },
     {
       role: 'Facilitator',
       org: 'Water Awareness Campaign, Mehra Abadi',
       timespan: 'Jan 2019 — May 2019',
-      detail: 'Ran community sessions on water wastage and water-saving techniques.',
+      detail:
+        'Ran door-to-door and small-group sessions in the neighbourhood on household water wastage and low-cost saving measures, with follow-up visits to check uptake.',
     },
   ],
 

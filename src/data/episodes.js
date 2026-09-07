@@ -17,6 +17,28 @@
  * `./profile.js` and is rendered by the `/plain` route, so the recruiter
  * escape hatch stays complete even though the game surface is selective.
  *
+ * Naming note: episode `title` is a PLAIN CATEGORY LABEL, not a
+ * flavor line. An earlier pass gave every episode a Telltale-style
+ * name ("THE RECORD BOOK", "48 HOURS, NO SLEEP", "THINGS THAT SHIPPED")
+ * with the factual description demoted to `subtitle`. That inverted the
+ * priority the 90-second rule needs: the chapter-select screen showed
+ * five flavor titles, three of which truncated, and nothing on it told a
+ * recruiter that episode 2 is teaching and research — the most
+ * employable thing here. The game framing now lives entirely in the
+ * chrome ("SEASON 1", "EPISODE 2", the window art) and in the panel
+ * copy, which frees the label to be flat and factual. `subtitle` is now
+ * a contents line: literally what is inside, no voice.
+ *
+ * ZNotes ("NOTES FOR STRANGERS") sits in episode 2, not episode 3, for
+ * the same reason. It is peer teaching, and under a leadership heading
+ * nobody looking for teaching experience would ever find it.
+ *
+ * `scene` names which key-art composition
+ * src/components/EpisodeArt.jsx draws for this episode. It is content,
+ * not styling: the drawing is a rendering of what the episode contains,
+ * so the choice belongs next to the copy it illustrates rather than in a
+ * lookup table in the screen.
+ *
  * Panel shape (spec section 6):
  *   header    → 2-5 words, uppercase, display face
  *   timestamp → "2024 — Present" style
@@ -31,27 +53,44 @@
  * builds a real resume out of `./profile.js`, so episodes whose material
  * is already covered there (education, roles, volunteering) would only
  * duplicate it. Values:
- *   'covered'  → do not render on /plain; profile.js already carries it
- *   'projects' → render its panels under the Projects heading
+ *   'covered'      → do not render on /plain; profile.js already carries it
+ *   'projects'     → render its panels under the Projects heading
+ *   'competitions' → render its panels under the Competitions & hackathons
+ *                    heading
  * This lives in the data, not in PlainResume.jsx, so the editorial call
  * about what is redundant stays next to the content it describes.
+ *
+ * `competitions` is new (the Dossier rebuild of `/plain`). Before this
+ * batch the `competitions` episode was tagged `plainRole: 'projects'`,
+ * which meant its five hackathon panels rendered mixed in with the three
+ * real project panels under one flat "Projects" heading on /plain — a
+ * real bug, not a stylistic choice; a recruiter scanning for shipped
+ * projects had to sort hackathon sprints out of the same list by eye.
+ * The two now split into their own sections, in the order this array is
+ * in (Projects first, Competitions second — recruiter-priority order per
+ * the Dossier rebuild brief), and PlainResume.jsx reads `heading` from
+ * here rather than hardcoding the string a second time.
  */
-export const PLAIN_SECTIONS = [{ role: 'projects', heading: 'Projects' }];
+export const PLAIN_SECTIONS = [
+  { role: 'projects', heading: 'Projects' },
+  { role: 'competitions', heading: 'Competitions & hackathons' },
+];
 
 export const episodes = [
   {
     id: 'education',
     number: 1,
-    title: 'THE RECORD BOOK',
-    subtitle: 'Grades, ranks, and how they got there',
+    title: 'EDUCATION',
+    subtitle: 'FAST-NUCES, A Levels, O Levels',
     cover: '/covers/ep1.webp',
+    scene: 'lecture',
     plainRole: 'covered',
     panels: [
       {
         header: 'RANK ONE OF 313',
         timestamp: '2024 — Present',
-        body: 'Started BS Computer Science at FAST-NUCES and finished the first semester at the top of a 313-person cohort. Three top-of-semester finishes followed, including a perfect 4.00 in Fall 2025. Cumulative CGPA sits at 3.96, with gold medals in Fall 2024 and Fall 2025.',
-        tags: ['FAST-NUCES', 'CGPA 3.96', 'Gold Medal'],
+        body: 'Started BS Computer Science at FAST-NUCES and finished the first semester at the top of a 313-person cohort. Three top-of-semester finishes followed — two gold medals, one silver, and a perfect 4.00 in Fall 2025. Cumulative CGPA sits at 3.96 across 73 credit hours, now in the fifth semester.',
+        tags: ['FAST-NUCES', 'CGPA 3.96', 'Rank 1 of 313'],
         link: null,
       },
       {
@@ -70,11 +109,12 @@ export const episodes = [
     ],
   },
   {
-    id: 'academia',
+    id: 'teaching',
     number: 2,
-    title: 'OFFICE HOURS',
-    subtitle: 'Teaching it, then researching it',
+    title: 'TEACHING & RESEARCH',
+    subtitle: 'Four courses as TA, an HEC-funded lab, two research threads',
     cover: '/covers/ep2.webp',
+    scene: 'study',
     plainRole: 'covered',
     panels: [
       {
@@ -85,42 +125,43 @@ export const episodes = [
         link: null,
       },
       {
-        header: 'KNOWLEDGE GRAPHS',
-        timestamp: '2026 — Present',
-        body: 'Research assistant at the Parallel Computing Networks lab at FAST, working on knowledge graph construction and relational modeling — structuring and linking complex networked datasets, then probing connectivity patterns and link prediction methods at a scale where the interesting failures only show up late.',
-        tags: ['Knowledge Graphs', 'Link Prediction', 'Research'],
-        link: null,
-      },
-      {
-        header: 'A PAPER IN PROGRESS',
-        timestamp: '2026 — Present',
-        body: 'Co-authoring a paper on image processing with a faculty advisor: computational methods for visual data analysis and feature extraction. Unfinished, unpublished, and listed here anyway, because this episode is about the questions that do not have answers yet rather than the ones that do.',
-        tags: ['Image Processing', 'Research', 'Unpublished'],
-        link: null,
-      },
-    ],
-    choicePrompt: 'You teach and you research — which comes first?',
-    choices: [
-      { label: 'Tell me about the teaching.', target: 'panel-0' },
-      { label: 'What are you researching?', target: 'panel-1' },
-      { label: 'Skip ahead.', target: 'next', silent: true },
-    ],
-  },
-  {
-    id: 'guild',
-    number: 3,
-    title: 'ORGANIZED CHAOS',
-    subtitle: 'On leading rooms full of people',
-    cover: '/covers/ep3.webp',
-    plainRole: 'covered',
-    panels: [
-      {
         header: 'NOTES FOR STRANGERS',
         timestamp: '2023 — 2024',
         body: 'Wrote curriculum-aligned revision notes for IGCSE Computer Science, then A2 Physics, for ZNotes — a free study platform used by students who cannot pay for tutoring. Also recorded topic explainers and past-paper walkthroughs. Teaching the syllabus turned out to be the fastest way to actually learn it.',
         tags: ['ZNotes', 'Teaching', 'Peer Education'],
         link: null,
       },
+      {
+        header: 'DISEASE AND WEATHER',
+        timestamp: '2026 — Present',
+        body: 'Research assistant on CHIP, an HEC-funded project at the Parallel Computing Networks lab, asking whether disease incidence in Pakistan tracks weather and natural-disaster patterns. The hard part is not the model — it is that the national health and climate data is barely documented. Find it, clean it, graph it, then predict on it.',
+        tags: ['Knowledge Graphs', 'HEC-Funded', 'Research'],
+        link: null,
+      },
+      {
+        header: 'WHY KNEE SURGERIES FAIL',
+        timestamp: '2026 — Present',
+        body: 'A second research thread, just started, with a faculty advisor: using medical image analysis and feature-extraction techniques to work out why knee surgeries fail. Too early to claim a result, or even a settled role — listed here because this episode is about the questions without answers yet, not the ones with.',
+        tags: ['Image Processing', 'Research', 'Early Stage'],
+        link: null,
+      },
+    ],
+    choicePrompt: 'You teach and you research — which comes first?',
+    choices: [
+      { label: 'Tell me about the teaching.', target: 'panel-0' },
+      { label: 'What are you researching?', target: 'panel-2' },
+      { label: 'Skip ahead.', target: 'next', silent: true },
+    ],
+  },
+  {
+    id: 'leadership',
+    number: 3,
+    title: 'LEADERSHIP & COMMUNITY',
+    subtitle: 'Society president, NaSCon, TEDx, moderation, volunteering',
+    cover: '/covers/ep3.webp',
+    scene: 'hall',
+    plainRole: 'covered',
+    panels: [
       {
         header: 'RUNNING THE SOCIETY',
         timestamp: '2025 — Present',
@@ -142,21 +183,29 @@ export const episodes = [
         tags: ['Community', 'Moderation', 'ProSports'],
         link: null,
       },
+      {
+        header: 'OFF CAMPUS',
+        timestamp: '2019 — 2026',
+        body: 'Weeks of thalassemia volunteering with the Sundas Foundation — patient visits, blood drives — then interviews with its director about eliminating the disease in Pakistan. Before that, a water-conservation campaign in Mehra Abadi. Since, event crew at a Code for Pakistan hackathon and a webinar helping students apply to university.',
+        tags: ['Volunteering', 'Sundas Foundation', 'Community'],
+        link: null,
+      },
     ],
     choicePrompt: 'They say you run the room. Which room?',
     choices: [
-      { label: 'You teach strangers too?', target: 'panel-0' },
-      { label: 'What do you actually run?', target: 'panel-1' },
+      { label: 'What do you actually run?', target: 'panel-0' },
+      { label: 'What about outside the society?', target: 'panel-2' },
       { label: 'Skip ahead.', target: 'next', silent: true },
     ],
   },
   {
-    id: 'sidequests',
+    id: 'competitions',
     number: 4,
-    title: '48 HOURS, NO SLEEP',
-    subtitle: 'Competitions, and what came out of them',
+    title: 'COMPETITIONS',
+    subtitle: 'Three second places and a national top ten',
     cover: '/covers/ep4.webp',
-    plainRole: 'projects',
+    scene: 'nightshift',
+    plainRole: 'competitions',
     panels: [
       {
         header: 'FIRST NATIONAL ROUND',
@@ -168,28 +217,28 @@ export const episodes = [
       {
         header: 'PARWANA, SECOND PLACE',
         timestamp: '2026',
-        body: "Built in three hours at HackSummer'26 and took second place. It checks a Pakistani overseas-job message against the government's own BEOE register and returns a verdict with a dated evidence chain. No model call sits on the path from message to verdict — six classical extraction stages and a state machine do the work.",
+        body: "Built in three hours at HackSummer'26 and took second place. It checks a Pakistani overseas-job message against the government's own BEOE register of 5,251 licensed agencies and returns a verdict with a dated evidence chain. No model call sits on the path from message to verdict — six classical extraction stages and a state machine do the work.",
         tags: ['Python', 'Flask', 'Entity Resolution', 'NLP'],
         link: 'https://github.com/itsabdullahaamir/parwana',
       },
       {
         header: 'EDUGAP, NATIONAL FINALS',
         timestamp: '2026',
-        body: "Second place at atomcamp's National AI Hackathon, and a place in the national top ten. EduGap parses course outlines, scrapes Rozee.pk for live Pakistani job postings, maps the gap between what is taught and what is hired for, then closes it with a Socratic tutor agent over two RAG databases.",
-        tags: ['RAG', 'Agents', 'Python', 'EdTech'],
-        link: null,
+        body: "Second place at atomcamp's National AI Hackathon, and a place in the national top ten. EduGap reads a curriculum, scrapes Rozee.pk for live job postings, and reports where the two have drifted apart. Contributed the architecture and planning and led the pitch — the engineering belonged to two teammates.",
+        tags: ['RAG', 'Agents', 'Architecture', 'Pitch'],
+        link: 'https://github.com/rayyan-41/EduGap_Curriculum-Job-Listings-Gap-Identifier',
       },
       {
         header: 'TAXNET, ONE GRAPH',
         timestamp: '2026',
-        body: 'Forty-eight hours, one graph. An entity-resolution pipeline — phonetic blocking, sentence-transformer matching, IDF-weighted Jaccard, logistic-regression fusion — reaching F1 around 0.90 on 110,000-plus records at near-linear runtime. On top of it: PageRank, community detection, cycle enumeration, and Positive-Unlabeled learning for scoring.',
-        tags: ['Neo4j GDS', 'scikit-learn', 'FastAPI', 'Graph ML'],
+        body: 'Forty-eight hours, one graph. Entity resolution — phonetic blocking, sentence-transformer matching, IDF-weighted Jaccard, logistic-regression fusion — reaching F1 near 0.90 on 110,000-plus records, then PageRank, community detection and Positive-Unlabeled scoring over it. Same split as EduGap: design input and the presentation, not the pipeline.',
+        tags: ['Neo4j GDS', 'Graph ML', 'Architecture', 'Pitch'],
         link: null,
       },
       {
-        header: 'PROMPTOPIA, NO MEDAL',
+        header: 'PROMPTOPIA, RUNNERS-UP',
         timestamp: '2026',
-        body: 'A generative-AI competition run by Google Developer Groups at FAST. Two-person team, one brief: use image generation to make a case about water pollution, then build the product deck proposing a fix. No placement on this one — included because not every competition ends with a medal.',
+        body: 'A generative-AI competition run by Google Developer Groups at FAST. Two-person team with Raja Muhammad Ali, one brief: use image generation to build a case about water pollution, then a product deck proposing the fix. Came second — the deck had to sell the idea, not just render it.',
         tags: ['Generative AI', 'Google DGC'],
         link: null,
       },
@@ -202,26 +251,27 @@ export const episodes = [
     ],
   },
   {
-    id: 'build',
+    id: 'projects',
     number: 5,
-    title: 'THINGS THAT SHIPPED',
-    subtitle: 'The ones that got finished',
+    title: 'PROJECTS',
+    subtitle: 'Two cities from scratch and Mario in x86 assembly',
     cover: '/covers/ep5.webp',
+    scene: 'workbench',
     plainRole: 'projects',
     panels: [
-      {
-        header: 'POCKETMUNSHI, BY VOICE',
-        timestamp: '2026 — Present',
-        body: 'A voice-first digital khaata for bazaar and kirana merchants: record udhaar and payments by speaking Urdu or Punjabi, get a Paper ID to scribble on the paper slip, verify later when the shop is quiet. Flutter, Riverpod, Drift over SQLite. Offline-first, no backend — the merchant owns their data.',
-        tags: ['Flutter', 'Dart', 'SQLite', 'Offline-First'],
-        link: null,
-      },
       {
         header: 'MARIO, IN ASSEMBLY',
         timestamp: '2025',
         body: "Rebuilt Super Mario's mechanics in x86 Assembly using the Irvine32 library, near enough from scratch: pixel-perfect collision detection and stack management done by hand. Sixty-two commits, which is the honest measure of it — this was not a weekend. The demo recording is more convincing than the description.",
         tags: ['x86 Assembly', 'Irvine32', 'Game Dev'],
         link: 'https://github.com/itsabdullahaamir/MarioInAssemblyAndIrvine',
+      },
+      {
+        header: 'CITYMIND, ONE LIVE GRAPH',
+        timestamp: '2026',
+        body: 'Five AI algorithms sharing a single live city graph, so a flood or a risk shift propagates and every module re-adapts. Owned the constraint-satisfaction layout solver, the A* emergency router that replans around live flooding, and the feedback loop turning predicted crime risk into road-weight multipliers. Built the dashboard too.',
+        tags: ['Python', 'CSP', 'A* Search', 'scikit-learn'],
+        link: 'https://github.com/ALI-Z-Ather/CityMind',
       },
       {
         header: 'A CITY IN C++',
@@ -233,8 +283,8 @@ export const episodes = [
     ],
     choicePrompt: 'Enough talk. What actually shipped?',
     choices: [
-      { label: 'What are you building right now?', target: 'panel-0' },
-      { label: 'Show me something low-level.', target: 'panel-1' },
+      { label: 'Show me something low-level.', target: 'panel-0' },
+      { label: 'What about the bigger systems?', target: 'panel-1' },
       { label: 'Skip ahead.', target: 'next', silent: true },
     ],
     // Mechanic 4: the one branching moment, placed at the end of this
@@ -250,7 +300,7 @@ export const episodes = [
         { label: '"Build the weird thing."', outcome: 'summary' },
       ],
       resolution:
-        'Either way: a ledger app for shopkeepers who do not trust apps, a plumber in x86 assembly, and a city simulated without a standard library. The answer was always going to be the weird thing. It just took a few semesters to admit it.',
+        'Either way: a plumber rebuilt in x86 assembly, and two different cities simulated from scratch — one of them a single live graph shared across five AI modules. The answer was always going to be the weird thing. It just took a few semesters to admit it.',
     },
   },
 ];

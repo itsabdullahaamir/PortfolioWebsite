@@ -26,6 +26,56 @@ import { useCallback } from 'react';
 import { useSettings } from '../context/SettingsContext.jsx';
 
 let ctx = null;
+let masterInput = null;
+
+/*
+  Every cue up to now connected straight to `audioCtx.destination`, which
+  caps out at 1.0 (hard, ugly digital clipping past that) — so the only
+  lever previous passes had was "raise each voice's own gain," and that
+  lever ran out: real-speaker reports of "way too low" kept coming back
+  even after gains were already pushed to the edge of what destination
+  could take without distorting. This is a genuine ceiling, not a tuning
+  miss, so this batch adds real headroom instead of pushing raw gain
+  again.
+
+  Chain: source voices -> `glue` (a gentle compressor that evens out the
+  peaks across simultaneously-playing voices, e.g. `intro`'s 3-voice
+  chord) -> `makeup` (a fixed gain stage that then boosts the now-tamed
+  signal well past what raw destination gain could survive) -> `limiter`
+  (a hard brickwall compressor right at the ceiling, so `makeup`'s boost
+  can never actually clip) -> destination. This is the standard
+  "compress, then make up the gain, then limit" mastering chain — it's
+  what lets the perceived loudness go up several times over without the
+  harsh distortion a naive gain increase would cause once voices sum
+  above 1.0.
+*/
+function getMasterInput(audioCtx) {
+  if (masterInput) return masterInput;
+
+  const glue = audioCtx.createDynamicsCompressor();
+  glue.threshold.setValueAtTime(-28, audioCtx.currentTime);
+  glue.knee.setValueAtTime(18, audioCtx.currentTime);
+  glue.ratio.setValueAtTime(8, audioCtx.currentTime);
+  glue.attack.setValueAtTime(0.002, audioCtx.currentTime);
+  glue.release.setValueAtTime(0.12, audioCtx.currentTime);
+
+  const makeup = audioCtx.createGain();
+  makeup.gain.setValueAtTime(3.2, audioCtx.currentTime);
+
+  const limiter = audioCtx.createDynamicsCompressor();
+  limiter.threshold.setValueAtTime(-1.5, audioCtx.currentTime);
+  limiter.knee.setValueAtTime(0, audioCtx.currentTime);
+  limiter.ratio.setValueAtTime(20, audioCtx.currentTime);
+  limiter.attack.setValueAtTime(0.001, audioCtx.currentTime);
+  limiter.release.setValueAtTime(0.08, audioCtx.currentTime);
+
+  glue.connect(makeup);
+  makeup.connect(limiter);
+  limiter.connect(audioCtx.destination);
+
+  masterInput = glue;
+  return masterInput;
+}
 
 function getContext() {
   if (typeof window === 'undefined') return null;
@@ -99,11 +149,94 @@ function blip({ freq, duration, type = 'sine', gain = 0.07, glideTo, delay = 0 }
   amp.gain.exponentialRampToValueAtTime(0.0001, start + duration);
 
   osc.connect(amp);
-  amp.connect(audioCtx.destination);
+  amp.connect(getMasterInput(audioCtx));
   osc.start(start);
   osc.stop(start + duration + 0.03);
 
   return { osc, amp };
+}
+
+/*
+  White-noise source buffer for `whoosh()` below, generated once and
+  reused. Two seconds is plenty — the source loops, so the buffer only
+  has to be long enough that the loop point isn't audible as a periodic
+  tick.
+
+  Noise rather than an oscillator because a whoosh is broadband air, not
+  a pitch: what makes it read as movement is a resonant band sweeping
+  ACROSS the noise floor, which is what the bandpass in `whoosh()` does.
+  Still zero shipped bytes — same reasoning as every other cue here.
+*/
+let noiseBuffer = null;
+
+function getNoiseBuffer(audioCtx) {
+  if (noiseBuffer) return noiseBuffer;
+  const length = Math.floor(audioCtx.sampleRate * 2);
+  const buffer = audioCtx.createBuffer(1, length, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < length; i += 1) data[i] = Math.random() * 2 - 1;
+  noiseBuffer = buffer;
+  return buffer;
+}
+
+/*
+  The route-change "whoosh" — the camera-move cue for
+  `components/PageTransition.jsx`. Direct user request: "a WHOOSH slow
+  sound effect as we move into the center of the screen with the
+  buildings moving away."
+
+  Two layers, because a bandpass sweep alone is thin and reads as a
+  hiss:
+    1. Looped white noise through a bandpass whose centre frequency
+       sweeps exponentially across the whole move (200 -> 2000 Hz going
+       IN, reversed coming OUT). The sweep direction is the entire
+       reason this cue takes a `direction` — rising as the camera pushes
+       forward, falling as it pulls back, so the sound tells you which
+       way you're travelling even before the screen has changed.
+    2. A quiet sine sub gliding the same direction, which is what gives
+       the move weight rather than just air.
+
+  The amplitude envelope peaks around 40% through and decays away rather
+  than cutting off, so it swells with the zoom and is already receding
+  by the time the incoming screen settles. Deliberately ~1s and gentle:
+  this fires on EVERY navigation, so it has to sit under the motion
+  rather than announce itself.
+*/
+function whoosh({ direction = 'in', duration = 1 } = {}) {
+  const audioCtx = getContext();
+  if (!audioCtx) return;
+
+  const now = audioCtx.currentTime;
+  const goingOut = direction === 'out';
+
+  const source = audioCtx.createBufferSource();
+  source.buffer = getNoiseBuffer(audioCtx);
+  source.loop = true;
+
+  const band = audioCtx.createBiquadFilter();
+  band.type = 'bandpass';
+  band.Q.setValueAtTime(1.1, now);
+  band.frequency.setValueAtTime(goingOut ? 2000 : 200, now);
+  band.frequency.exponentialRampToValueAtTime(goingOut ? 200 : 2000, now + duration);
+
+  const amp = audioCtx.createGain();
+  amp.gain.setValueAtTime(0.0001, now);
+  amp.gain.linearRampToValueAtTime(0.38, now + duration * 0.4);
+  amp.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+  source.connect(band);
+  band.connect(amp);
+  amp.connect(getMasterInput(audioCtx));
+  source.start(now);
+  source.stop(now + duration + 0.05);
+
+  blip({
+    freq: goingOut ? 98 : 52,
+    duration: duration * 0.9,
+    type: 'sine',
+    gain: 0.2,
+    glideTo: goingOut ? 46 : 106,
+  });
 }
 
 /*
@@ -136,11 +269,11 @@ function fadeOutVoices(voices) {
 export const sounds = {
   // Roving focus (arrow keys / hover) on menu or choice items. Fires
   // often, so it has to stay quiet and short or it becomes tiring.
-  navigate: () => blip({ freq: 420, duration: 0.05, type: 'triangle', gain: 0.04 }),
+  navigate: () => blip({ freq: 420, duration: 0.05, type: 'triangle', gain: 0.1 }),
 
   // An item is actually activated (click/Enter) — firmer and a touch
   // lower than navigate, so it reads as "confirmed" rather than "moved".
-  select: () => blip({ freq: 300, duration: 0.09, type: 'sine', gain: 0.075, glideTo: 190 }),
+  select: () => blip({ freq: 300, duration: 0.09, type: 'sine', gain: 0.16, glideTo: 190 }),
 
   // The memory toast appearing (spec 3.5 mechanic 1) — covers
   // episodeFirstOpen, panelExpand, choiceMade, pdfDownload, and the
@@ -152,7 +285,7 @@ export const sounds = {
   // cues both glide up/stay bright because they're momentary interaction
   // feedback; this one is closer to a mood beat, per the "something
   // darker" note from the reference screenshot.
-  toast: () => blip({ freq: 260, duration: 0.22, type: 'sine', gain: 0.05, glideTo: 170 }),
+  toast: () => blip({ freq: 260, duration: 0.22, type: 'sine', gain: 0.12, glideTo: 170 }),
 
   // The one-time signature sting — the "Netflix ta-dum" idea, adapted to
   // this site's tone. A three-note minor motif (C3 - Eb3 - G3, i.e. a
@@ -171,25 +304,19 @@ export const sounds = {
   // still cut short if that beat ends early (a skip) — see the returned
   // stop function below and TitleScreen.jsx's usage of it.
   //
-  // Gain retuned louder TWICE now. First pass ("that sound is a bit TOO
-  // small... make it louder and proper") went from ~0.05 to ~0.13-0.18.
-  // Still reported as "EXTREMELY LOW... can't hear it at 100 percent
-  // volume without headphones" on real speakers, so this second pass is
-  // a much bigger jump — roughly another 3x on top of the first, not an
-  // incremental nudge. The three simultaneous chord voices (sub-bass +
-  // root + shimmer, all starting at ~0.32s) are balanced so their peaks
-  // sum to about 0.95 rather than each just being cranked independently
-  // — Web Audio sums overlapping voices at the destination with no
-  // automatic normalization, so pushing every voice to a "loud" gain
-  // independently would clip (harsh digital distortion) instead of
-  // actually sounding louder. This is well above the "well under 0.1"
-  // guidance the other cues follow, which is deliberate: this is the one
-  // signature moment in the app, not a repeated UI tick, so it's allowed
-  // to actually announce itself. The closing note is also still a real
-  // three-layer chord hit (sub-bass root an octave down for weight, the
-  // G3->F3 root/glide carrying the melody, quiet octave-up shimmer)
-  // rather than one oscillator turned up — layering plus headroom is
-  // what makes a synth hit read as "proper" and loud without distorting.
+  // Gain was retuned louder twice already, and STILL came back as
+  // inaudible without headphones ("way too low" — not just this cue, but
+  // navigate/select/toast too). That third report is what exposed the
+  // real bug: every cue connected straight to `audioCtx.destination`,
+  // which hard-clips past gain 1.0, so raw per-voice gain had already
+  // hit its ceiling — there was no more room to push. `getMasterInput()`
+  // above now routes every voice through a compressor -> makeup-gain ->
+  // limiter chain instead, which is what actually bought the headroom to
+  // get louder without distortion; the per-voice gains below are a
+  // smaller supporting bump, not the main fix this time. Individual
+  // voice gains still matter as the compressor's input level, so they
+  // stay balanced so peaks sum to about 0.95 pre-chain rather than each
+  // just being cranked independently.
   //
   // Returns a `stop()` function (rather than nothing, like every other
   // cue) so the caller can end the sting early — "play it the moment the
@@ -197,6 +324,14 @@ export const sounds = {
   // tune to be interruptible, since TitleReveal's hold can end sooner
   // than 0.9s (a click/tap/key skips it at any time, per spec 4.1's "no
   // forced interaction").
+  // Route-change camera move (`components/PageTransition.jsx`). Two
+  // names rather than one cue taking an argument, so `useSound()` keeps
+  // its single-string API and callers never touch `sounds` directly.
+  // `whooshIn` = pushing forward into a submenu, `whooshOut` = pulling
+  // back to the menu behind it. See `whoosh()` above.
+  whooshIn: () => whoosh({ direction: 'in' }),
+  whooshOut: () => whoosh({ direction: 'out' }),
+
   intro: () => {
     const voices = [
       blip({ freq: 130.81, duration: 0.22, type: 'triangle', gain: 0.44, delay: 0 }), // C3
@@ -210,7 +345,8 @@ export const sounds = {
 };
 
 /**
- * `useSound()('navigate' | 'select' | 'toast' | 'intro')` — gated on the
+ * `useSound()('navigate' | 'select' | 'toast' | 'whooshIn' |
+ * 'whooshOut' | 'intro')` — gated on the
  * Settings sound toggle so no caller needs its own `if (sound)` check.
  * Returns whatever the underlying cue returns (`undefined` for most;
  * `intro` returns a `stop()` function — see `sounds.intro` above) so a

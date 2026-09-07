@@ -98,3 +98,22 @@
     opacity: 0.25;
   }
 }
+
+/*
+  The three-bar equalizer glyph on BackgroundMusic.jsx's "Currently
+  Playing" badge (main-menu lofi playlist, direct user request — not
+  spec's mechanic 5). Each bar reuses this keyframe with a staggered
+  `animation-delay` (set inline per-bar in the component) so the three
+  don't move in lockstep. Gated off under reduced motion by the
+  component itself, same pattern as every other animation in this file —
+  bars render at a fixed height instead of freezing mid-pulse.
+*/
+@keyframes eq-bar {
+  0%,
+  100% {
+    transform: scaleY(0.4);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}

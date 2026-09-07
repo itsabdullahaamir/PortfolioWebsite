@@ -274,10 +274,10 @@ Adapt it here as a lightweight, honest analytics reveal at the end of an episode
 ┌──────────────────────────────────────────────┐
 │              THIS EPISODE'S CHOICES           │
 │                                                │
-│  Looked at PocketMunshi first                 │
+│  Looked at the assembly project first         │
 │  ████████████████░░░░░░░░  68%                │
 │                                                │
-│  Looked at Dawai Express first                │
+│  Looked at the city sim first                 │
 │  ████████░░░░░░░░░░░░░░░░  32%                │
 │                                                │
 │  Read the research episode                    │

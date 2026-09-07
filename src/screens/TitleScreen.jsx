@@ -5,6 +5,7 @@ import PresentsCard from '../components/PresentsCard.jsx';
 import TitleReveal from '../components/TitleReveal.jsx';
 import MainMenu from '../components/MainMenu.jsx';
 import { useSettings } from '../context/SettingsContext.jsx';
+import { useMusic } from '../context/MusicContext.jsx';
 import { useSound, hasHadUserGesture } from '../lib/sound.js';
 
 /**
@@ -124,10 +125,21 @@ export default function TitleScreen() {
   const reducedMotion = !motionEnabled || prefersReducedMotion;
   const [beat, setBeat] = useState(hasPlayedIntro ? BEATS.MENU : BEATS.START);
   const playSound = useSound();
+  const { start: startMusic } = useMusic();
 
   const advanceFromStart = useCallback(() => setBeat(BEATS.PRESENTS), []);
   const advanceFromPresents = useCallback(() => setBeat(BEATS.REVEAL), []);
   const advanceFromReveal = useCallback(() => setBeat(BEATS.MENU), []);
+
+  // Flips MusicProvider's one-way `started` flag the moment the menu beat
+  // is reached — this is what lets BackgroundMusic.jsx (mounted once in
+  // App.jsx, outside this component) know it's safe to start playing.
+  // Runs again on every later same-session mount of `/` that opens
+  // straight on MENU (see the `hasPlayedIntro` note above `BEATS`), but
+  // `startMusic()` is a no-op once already true.
+  useEffect(() => {
+    if (beat === BEATS.MENU) startMusic();
+  }, [beat, startMusic]);
 
   useEffect(() => {
     if (beat !== BEATS.REVEAL || hasPlayedIntro) return undefined;

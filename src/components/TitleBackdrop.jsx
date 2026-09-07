@@ -408,7 +408,30 @@ function CityLayer({
   );
 }
 
-export default function TitleBackdrop({ reducedMotion = false, interactive = false }) {
+export default function TitleBackdrop({
+  reducedMotion = false,
+  interactive = false,
+  variant = 'title',
+}) {
+  /*
+    `distant` is ChapterSelect.jsx's mode: the same city, further back.
+    Three differences, and all three are doing a job:
+
+    - The NEAR layer is not rendered. That is the design (on /chapters
+      you are looking at the skyline from further away, and the screen's
+      own content occupies the foreground the near layer would fight),
+      and it is also two thirds of this component's ~1,450 <rect>s gone,
+      which matters because the route dolly in PageTransition.jsx has to
+      zoom whichever screen is incoming. Dropping the near layer also
+      drops the easter-egg window, which is correct — that secret belongs
+      to the title screen, and duplicating it here would cheapen it.
+    - No pointer parallax, so no window-level pointermove listener at
+      all. A backdrop that leans around behind a screen you are trying
+      to read is distraction, not depth.
+    - A heavier scrim on top, since real content sits over this rather
+      than a title card with its own scrim.
+  */
+  const distant = variant === 'distant';
   const containerRef = useRef(null);
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const [soloFound, setSoloFound] = useState(false);
@@ -427,7 +450,7 @@ export default function TitleBackdrop({ reducedMotion = false, interactive = fal
     resolve it against our own rect.
   */
   useEffect(() => {
-    if (reducedMotion) return undefined;
+    if (reducedMotion || distant) return undefined;
     const onMove = (event) => {
       const rect = containerRef.current?.getBoundingClientRect();
       if (!rect?.width || !rect?.height) return;
@@ -443,10 +466,10 @@ export default function TitleBackdrop({ reducedMotion = false, interactive = fal
       window.removeEventListener('pointermove', onMove);
       document.documentElement.removeEventListener('pointerleave', onLeave);
     };
-  }, [reducedMotion]);
+  }, [reducedMotion, distant]);
 
   const parallax = (strength) =>
-    reducedMotion
+    reducedMotion || distant
       ? undefined
       : { transform: `translate3d(${pointer.x * strength}px, ${pointer.y * strength * 0.5}px, 0)` };
 
@@ -476,14 +499,14 @@ export default function TitleBackdrop({ reducedMotion = false, interactive = fal
     also a firework; everything else in the frame is fair game.
   */
   useEffect(() => {
-    if (!interactive || reducedMotion) return undefined;
+    if (!interactive || reducedMotion || distant) return undefined;
     const onClick = (event) => {
       if (event.target.closest?.('button, a, [role="button"]')) return;
       spawnEmbers(event.clientX, event.clientY);
     };
     window.addEventListener('click', onClick);
     return () => window.removeEventListener('click', onClick);
-  }, [interactive, reducedMotion, spawnEmbers]);
+  }, [interactive, reducedMotion, distant, spawnEmbers]);
 
   /*
     The easter egg fires regardless of reduced motion — it is content, not
@@ -577,23 +600,26 @@ export default function TitleBackdrop({ reducedMotion = false, interactive = fal
           window would fire it and its toast on the way out — the reveal
           would land on a screen the visitor has already left. On the menu
           they can actually stop and look at it. */}
-      <CityLayer
-        layer={LAYERS.near}
-        layerKey="near"
-        style={parallax(LAYERS.near.parallax)}
-        reducedMotion={reducedMotion}
-        interactiveWindows={interactive}
-        soloFound={soloFound}
-        onSoloClick={handleSoloClick}
-      />
+      {distant ? null : (
+        <CityLayer
+          layer={LAYERS.near}
+          layerKey="near"
+          style={parallax(LAYERS.near.parallax)}
+          reducedMotion={reducedMotion}
+          interactiveWindows={interactive}
+          soloFound={soloFound}
+          onSoloClick={handleSoloClick}
+        />
+      )}
 
       <div className="texture-halftone pointer-events-none absolute inset-0" />
 
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          background:
-            'radial-gradient(120% 90% at 50% 40%, transparent 42%, color-mix(in oklab, var(--ink) 58%, transparent) 100%)',
+          background: distant
+            ? 'radial-gradient(120% 90% at 50% 40%, color-mix(in oklab, var(--ink) 44%, transparent) 0%, color-mix(in oklab, var(--ink) 82%, transparent) 100%)'
+            : 'radial-gradient(120% 90% at 50% 40%, transparent 42%, color-mix(in oklab, var(--ink) 58%, transparent) 100%)',
         }}
       />
 

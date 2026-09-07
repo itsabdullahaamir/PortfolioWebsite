@@ -16,6 +16,14 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
  * happens before anything else renders, so defaulting this true just means
  * sound is already on once that first click lands, not that it plays
  * unprompted.
+ *
+ * `music` is a separate toggle, added for `../components/BackgroundMusic.jsx`
+ * (the main-menu lofi playlist, direct user request — see
+ * `../components/CLAUDE.md` and `../lib/CLAUDE.md`). Deliberately its own
+ * flag rather than reusing `sound`: a visitor may want the short UI blips
+ * without a continuous music bed, or vice versa. Same autoplay guarantee
+ * applies — `<audio>.play()` needs a prior user gesture, which
+ * `StartPrompt.jsx` (Beat 0) already provides before the menu can render.
  */
 
 const STORAGE_KEY = 'tt_resume_settings';
@@ -24,6 +32,7 @@ const DEFAULTS = {
   motion: true, // false disables parallax/typewriter/transitions on top of prefers-reduced-motion
   sound: true, // on by default; user can toggle off in OPTIONS — see comment above
   typewriter: true,
+  music: true, // on by default, same rationale as `sound` — see comment above
 };
 
 const SettingsContext = createContext(null);

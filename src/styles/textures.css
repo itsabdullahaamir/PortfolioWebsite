@@ -12,6 +12,18 @@
 }
 
 /*
+  Same halftone, inverted for dark surfaces — Panel.jsx's `night` tone
+  (ChapterSelect.jsx). Identical dot geometry, bone instead of ink, and a
+  touch more opacity because a light dot on a dark ground carries less
+  perceived contrast than the reverse at the same alpha.
+*/
+.texture-halftone-light {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Ccircle cx='2' cy='2' r='1' fill='%23efe7d8'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  opacity: 0.08;
+}
+
+/*
   Film grain overlay — mechanic 5 (spec section 5), one of the two chosen
   ambient details. 3% opacity, animated at ~8fps via a steps() timing
   function shifting background-position (not opacity/transform, so it
