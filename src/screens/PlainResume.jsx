@@ -565,7 +565,7 @@ export default function PlainResume() {
                 type="search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Filter — try “graph”, “teaching”, “Neo4j”"
+                placeholder="Filter: try “graph”, “teaching”, “Neo4j”"
                 className="w-full border border-ink/30 bg-transparent px-3 py-2 font-body text-sm text-ink placeholder:text-ink/40"
               />
             </div>

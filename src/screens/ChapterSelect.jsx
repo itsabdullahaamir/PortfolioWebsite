@@ -83,7 +83,7 @@ function spanFor(episode) {
   if (!years.length) return null;
   const first = Math.min(...years);
   const last = ongoing ? 'Present' : Math.max(...years);
-  return String(first) === String(last) ? `${first}` : `${first} — ${last}`;
+  return String(first) === String(last) ? `${first}` : `${first} to ${last}`;
 }
 
 /** First few distinct tags across an episode's panels. */

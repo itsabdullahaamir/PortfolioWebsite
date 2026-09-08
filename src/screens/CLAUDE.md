@@ -64,3 +64,11 @@ beats since nothing is mounted behind the departing beat).
   mechanic or a line of copy: mechanics live in `../game/scenes/`, copy in
   `../data/games.js`. Run `npm run verify:scenes` after any change either
   screen makes to a scene.
+- **Punctuation pass (this batch):** the few hardcoded reader-facing
+  strings that live in these files rather than in `../data/` —
+  `Floor.jsx`'s `promptLabel`, `Play.jsx`'s two footer links,
+  `PlainResume.jsx`'s filter `placeholder`, and the `spanFor`/`formatYears`
+  year-range joiners in `ChapterSelect.jsx` and `EpisodeView.jsx` (now
+  `${first} to ${last}`, not `${first} — ${last}`) — had their em dashes
+  removed on user instruction. No logic changed; the `/present/i` span
+  detector still matches the new lowercase `to present` timestamps.

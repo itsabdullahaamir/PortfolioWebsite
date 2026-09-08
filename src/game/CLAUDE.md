@@ -94,3 +94,8 @@ let you take gold would be a nicer game and a dishonest one. **Do not
   static rendering can be screenshotted, behaviour cannot.
 - Performance: no `shadowBlur`, no per-object gradient allocation in a
   frame loop, precompute static geometry in `init()`.
+- **Punctuation pass (this batch):** `scenes/overworld.js`'s two
+  reader-facing strings — the stairwell `hint` and the door caption
+  joiner (`▲ / E   ${line}`, previously `▲ / E  —  ${line}`) — had their
+  em dashes removed on user instruction. No geometry or event logic
+  changed; `npm run verify:scenes` still passes.

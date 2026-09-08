@@ -110,10 +110,10 @@ export default function Floor() {
 
   const promptLabel = (() => {
     if (!prompt) return 'Walk left or right to find a door.';
-    if (prompt.kind === 'stairs') return 'The stairs — the Episode Explorer. Every episode, unlocked.';
-    if (prompt.kind === 'desk') return 'The desk — the plain resume. Every fact, on one page.';
-    if (!prompt.unlocked) return `Episode ${prompt.number}, ${prompt.title} — locked. Clear the door before it, or take the stairs.`;
-    return `Episode ${prompt.number}, ${prompt.title} — ${prompt.cleared ? 'cleared. Enter to replay.' : 'Enter to play.'}`;
+    if (prompt.kind === 'stairs') return 'The stairs. The Episode Explorer, every episode unlocked.';
+    if (prompt.kind === 'desk') return 'The desk. The plain resume, every fact on one page.';
+    if (!prompt.unlocked) return `Episode ${prompt.number}, ${prompt.title}. Locked: clear the door before it, or take the stairs.`;
+    return `Episode ${prompt.number}, ${prompt.title}. ${prompt.cleared ? 'Cleared. Enter to replay.' : 'Enter to play.'}`;
   })();
 
   return (

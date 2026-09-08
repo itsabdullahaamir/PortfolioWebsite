@@ -97,7 +97,7 @@ export function createOverworld(config) {
   // caption bolted over it.
   const spots = [
     { kind: 'desk', x: DESK_X, label: 'THE DESK' },
-    { kind: 'stairs', x: STAIRS_X, label: 'THE STAIRS', hint: 'Episode Explorer — every episode, unlocked' },
+    { kind: 'stairs', x: STAIRS_X, label: 'THE STAIRS', hint: 'Episode Explorer: every episode, unlocked' },
     ...doors.map((door, i) => ({
       kind: 'door',
       x: FIRST_DOOR_X + DOOR_SPACING * i,
@@ -712,7 +712,7 @@ function drawPromptFor(g, ctx, spot, shift) {
     align: 'center',
     tracking: 2.2,
   });
-  text(g, locked ? line : `▲ / E  —  ${line}`, x, y + 46, {
+  text(g, locked ? line : `▲ / E   ${line}`, x, y + 46, {
     size: 12,
     face: BODY,
     color: locked ? rgba(palette.bone, 0.4) : palette.signal,

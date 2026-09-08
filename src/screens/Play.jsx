@@ -462,13 +462,13 @@ function ResultsCard({
             to="/floor"
             className="px-1 py-1 font-body text-sm uppercase tracking-widest text-bone/70 underline decoration-2 underline-offset-4 hover:text-bone"
           >
-            {won && nextId ? 'Back to the floor — next door is open' : 'Back to the floor'}
+            {won && nextId ? 'Back to the floor, next door is open' : 'Back to the floor'}
           </Link>
           <Link
             to="/plain"
             className="px-1 py-1 font-body text-xs uppercase tracking-[0.2em] text-bone/45 underline decoration-1 underline-offset-4 hover:text-bone/80"
           >
-            All of it on one page — the plain resume
+            All of it on one page: the plain resume
           </Link>
           {/*
             The skill-check release valve. Only offered once someone has
