@@ -268,3 +268,22 @@ html.route-moving *::after {
     font-size: 0.7em;
   }
 }
+
+/*
+  Game surfaces (/floor and /play/:id) run edge-to-edge dark.
+
+  `html { scrollbar-gutter: stable }` above reserves a gutter strip, and
+  that strip paints the BODY background — so on a full-bleed dark screen
+  a vertical band of --paper showed down the right edge, which read as
+  the layout being broken rather than as a scrollbar. The screens
+  themselves cannot fix it: the gutter is outside every element they
+  render.
+
+  `:has()` keeps this declarative rather than adding a class-toggling
+  effect to two screens (and a cleanup path for every way they can
+  unmount, including a transition that unmounts them mid-animation).
+  Scoped to .game-surface so it can never affect the document screens.
+*/
+html:has(.game-surface) {
+  background-color: var(--ink);
+}

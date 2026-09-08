@@ -27,7 +27,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
  */
 function parentOf(pathname) {
   if (pathname.startsWith('/chapters/')) return '/chapters';
-  if (pathname === '/chapters' || pathname === '/plain') return '/';
+  // A room on the floor escapes to the floor, not to the menu, so ESC
+  // agrees with the "Leave the room" control inside Play.jsx. The floor
+  // itself escapes to the title screen, same as /chapters.
+  if (pathname.startsWith('/play/')) return '/floor';
+  if (pathname === '/chapters' || pathname === '/plain' || pathname === '/floor') return '/';
   return null;
 }
 

@@ -171,8 +171,14 @@ export const episodes = [
       },
       {
         header: 'EVENT HEAD, NASCON',
-        timestamp: '2026 — Present',
-        body: "Event Head for C++ FaceOff, then Speed Programming, at NaSCon — Pakistan's largest student-run computing competition. Alongside it: media and marketing for TEDxFASTIslamabad, and HR Director for Isaar, fielding queries and coordinating goals across every Islamabad chapter.",
+        // Corrected against profile.js: the role is CS Event Head for
+        // Speed Programming and the event has not happened yet. An
+        // earlier version of this panel read "Event Head for C++
+        // FaceOff, then Speed Programming" dated "2026 — Present",
+        // which asserted a completed prior round that the resume no
+        // longer claims. Do not restore the earlier wording.
+        timestamp: '2026 — Upcoming',
+        body: "CS Event Head for Speed Programming at NaSCon — Pakistan's largest student-run computing competition: setting the problem sets and rules, briefing the volunteer panel, and coordinating with sponsors and judges. Alongside it, media and marketing for TEDxFASTIslamabad, and HR Director for Isaar across every Islamabad chapter.",
         tags: ['NaSCon', 'Event Management', 'TEDx', 'HR'],
         link: null,
       },

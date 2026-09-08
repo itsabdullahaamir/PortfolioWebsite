@@ -69,7 +69,13 @@ export default function MainMenu({ reducedMotion }) {
   // handleKeyDown below. Nothing here is unreachable by keyboard alone.
 
   const items = [
-    { key: 'new-game', label: 'NEW GAME', action: () => navigate('/chapters') },
+    // NEW GAME and EPISODES are deliberately different destinations now.
+    // NEW GAME goes to the walkable floor: doors in order, a minigame
+    // behind each. EPISODES goes to the Explorer, where everything is
+    // unlocked and readable immediately. Two ways in, one for playing
+    // and one for skimming — which is what lets the floor have real
+    // locks without gating any content (root CLAUDE.md 6 rules 1, 3).
+    { key: 'new-game', label: 'NEW GAME', action: () => navigate('/floor') },
     hasSave
       ? {
           key: 'continue',
@@ -77,7 +83,7 @@ export default function MainMenu({ reducedMotion }) {
           action: () => navigate(`/chapters/${lastEpisodeId}`),
         }
       : null,
-    { key: 'episodes', label: 'EPISODES', action: () => navigate('/chapters') },
+    { key: 'episodes', label: 'EPISODE EXPLORER', action: () => navigate('/chapters') },
     { key: 'extras', label: 'PLAIN RESUME', action: () => navigate('/plain') },
     { key: 'options', label: 'OPTIONS', action: () => setOptionsOpen((open) => !open) },
   ].filter(Boolean);

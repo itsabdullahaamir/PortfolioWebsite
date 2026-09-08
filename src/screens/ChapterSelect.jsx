@@ -363,9 +363,21 @@ export default function ChapterSelect() {
             })}
           </ul>
 
+          {/*
+            Three ways out, in increasing order of how much time they ask
+            for. This screen is the UNGATED half of the pair: every
+            episode here is readable in any order, which is what makes
+            the locked doors on /floor legal at all (root CLAUDE.md
+            section 6 rules 1 and 3). The floor link is the way back INTO
+            the played version — without it the Explorer is a dead end
+            for anyone who arrived here from a locked door.
+          */}
           <div className="mt-5 flex flex-wrap gap-3">
             <Link to="/" className={ACTION}>
               <span aria-hidden="true">◂</span> Previous menu
+            </Link>
+            <Link to="/floor" className={ACTION}>
+              <span aria-hidden="true">▸</span> Play the floor
             </Link>
             <Link to="/plain" className={ACTION}>
               <span aria-hidden="true">▤</span> Plain resume

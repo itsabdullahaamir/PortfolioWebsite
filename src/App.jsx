@@ -13,6 +13,8 @@ import TitleScreen from './screens/TitleScreen.jsx';
 import ChapterSelect from './screens/ChapterSelect.jsx';
 import EpisodeView from './screens/EpisodeView.jsx';
 import PlainResume from './screens/PlainResume.jsx';
+import Floor from './screens/Floor.jsx';
+import Play from './screens/Play.jsx';
 
 /**
  * Route-change transition. `TitleScreen`/`ChapterSelect`/`EpisodeView`/
@@ -107,6 +109,13 @@ export default function App() {
                   <Route path="/chapters" element={<ChapterSelect />} />
                   <Route path="/chapters/:id" element={<EpisodeView />} />
                   <Route path="/plain" element={<PlainResume />} />
+                  {/* The game surface. /floor is the walkable overworld
+                      behind NEW GAME; /play/:id is one room on it. Both
+                      sit inside the same AnimatedOutlet layout as every
+                      other screen so the camera dolly, the scroll reset
+                      and ESC all treat them like anywhere else. */}
+                  <Route path="/floor" element={<Floor />} />
+                  <Route path="/play/:id" element={<Play />} />
                 </Route>
               </Routes>
             </ToastProvider>

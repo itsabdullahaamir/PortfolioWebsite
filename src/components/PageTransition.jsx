@@ -140,6 +140,13 @@ const ROUTE_DEPTHS = [
   [/^\/chapters\/[^/]+/, 2],
   [/^\/chapters\/?$/, 1],
   [/^\/plain\/?$/, 1],
+  // The game surface mirrors the reading surface's depths: the walkable
+  // floor sits one level in from the menu (like /chapters), and a room
+  // on it sits one level further (like an episode). So walking into a
+  // door dollies IN and leaving a room dollies back OUT, which is the
+  // same camera grammar the rest of the site already uses.
+  [/^\/play\/[^/]+/, 2],
+  [/^\/floor\/?$/, 1],
 ];
 
 function depthOf(pathname) {

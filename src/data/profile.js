@@ -168,11 +168,11 @@ export const profile = {
       detail: 'Campus lead for the 2026-27 tenure. Ran Executive Council hiring; leads campus outreach and engagement.',
     },
     {
-      role: 'CS Event Head',
-      org: 'NaSCon, FAST-NUCES',
-      timespan: 'Feb 2026 — Present',
+      role: "CS Event Head",
+      org: "NaSCon, FAST-NUCES",
+      timespan: "2026 (upcoming)",
       detail:
-        'Event Head for Speed Programming and, before it, C++ FaceOff at Pakistan’s largest student-run computing competition. Set the problem sets and rules, briefed the volunteer panel, coordinated with sponsors and judges, and ran both rounds on competition day.',
+        "Event Head for Speed Programming at Pakistan’s largest student-run computing competition. Responsible for setting problem sets and rules, briefing the volunteer panel, coordinating with sponsors and judges, and running the event on competition day.",
     },
     {
       role: 'Director of Human Resources',

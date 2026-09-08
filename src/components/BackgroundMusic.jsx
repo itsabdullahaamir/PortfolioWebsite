@@ -74,6 +74,12 @@ import { playlist } from '../lib/musicPlaylist.js';
 const VOLUME = 0.35;
 const FADE_MS = 600;
 const FADE_STEPS = 12;
+// How long the full "Now Playing" card stays open before it shrinks back
+// to the bare equaliser puck. It pops open on every track change (and on
+// hover/focus) so a visitor still sees what came on — it just stops
+// permanently sitting on top of whatever is in that corner of the menu
+// and game screens once they've had a chance to read it.
+const COLLAPSE_MS = 4500;
 
 export default function BackgroundMusic() {
   const { music } = useSettings();
@@ -82,10 +88,31 @@ export default function BackgroundMusic() {
   const prefersReducedMotion = useReducedMotion();
   const audioRef = useRef(null);
   const fadeIntervalRef = useRef(null);
+  const collapseTimerRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [expanded, setExpanded] = useState(true);
 
   const track = playlist[trackIndex];
   const isPlaylist = playlist.length > 1;
+
+  const scheduleCollapse = () => {
+    clearTimeout(collapseTimerRef.current);
+    collapseTimerRef.current = setTimeout(() => setExpanded(false), COLLAPSE_MS);
+  };
+  const openBadge = () => {
+    clearTimeout(collapseTimerRef.current);
+    setExpanded(true);
+  };
+
+  // Pop the card open whenever the track changes (including the first
+  // one), then let it settle closed again on its own.
+  useEffect(() => {
+    if (!isPlaying) return undefined;
+    openBadge();
+    scheduleCollapse();
+    return () => clearTimeout(collapseTimerRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trackIndex, isPlaying]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -158,14 +185,28 @@ export default function BackgroundMusic() {
       {music && isPlaying ? (
         <button
           type="button"
-          onClick={next}
-          disabled={!isPlaylist}
+          onClick={() => {
+            if (!expanded) {
+              openBadge();
+              scheduleCollapse();
+            } else if (isPlaylist) {
+              next();
+            }
+          }}
+          onMouseEnter={openBadge}
+          onMouseLeave={scheduleCollapse}
+          onFocus={openBadge}
+          onBlur={scheduleCollapse}
           aria-label={
-            isPlaylist
-              ? `Now playing ${track.title}${track.artist ? ` by ${track.artist}` : ''}. Click to skip to the next track.`
-              : `Now playing ${track.title}${track.artist ? ` by ${track.artist}` : ''}.`
+            !expanded
+              ? `Now playing ${track.title}${track.artist ? ` by ${track.artist}` : ''}. Click to show track details.`
+              : isPlaylist
+                ? `Now playing ${track.title}${track.artist ? ` by ${track.artist}` : ''}. Click to skip to the next track.`
+                : `Now playing ${track.title}${track.artist ? ` by ${track.artist}` : ''}.`
           }
-          className="fixed right-4 top-4 z-50 flex items-center gap-2 border border-bone/20 bg-ink/90 px-3 py-2.5 text-left shadow-[4px_4px_0_var(--shadow)] disabled:cursor-default sm:right-8 sm:top-6"
+          className={`fixed right-4 top-4 z-50 flex items-center border border-bone/20 bg-ink/90 text-left shadow-[4px_4px_0_var(--shadow)] sm:right-8 sm:top-6 ${
+            expanded ? 'gap-2 px-3 py-2.5' : 'gap-0 p-2'
+          }`}
         >
           <span className="flex h-3 items-end gap-[2px]" aria-hidden="true">
             {[0, 1, 2].map((bar) => (
@@ -178,19 +219,21 @@ export default function BackgroundMusic() {
               />
             ))}
           </span>
-          <span className="min-w-0">
-            <span className="block font-display text-[10px] uppercase leading-none tracking-[0.2em] text-signal">
-              Now Playing
-            </span>
-            <span className="mt-1 block max-w-[13rem] truncate font-display text-sm leading-none text-bone">
-              {track.title}
-            </span>
-            {track.artist || track.album || track.source ? (
-              <span className="mt-1 block max-w-[13rem] truncate font-body text-[11px] leading-none text-bone/60">
-                {[track.artist, track.album || track.source].filter(Boolean).join(' · ')}
+          {expanded ? (
+            <span className="min-w-0">
+              <span className="block font-display text-[10px] uppercase leading-none tracking-[0.2em] text-signal">
+                Now Playing
               </span>
-            ) : null}
-          </span>
+              <span className="mt-1 block max-w-[13rem] truncate font-display text-sm leading-none text-bone">
+                {track.title}
+              </span>
+              {track.artist || track.album || track.source ? (
+                <span className="mt-1 block max-w-[13rem] truncate font-body text-[11px] leading-none text-bone/60">
+                  {[track.artist, track.album || track.source].filter(Boolean).join(' · ')}
+                </span>
+              ) : null}
+            </span>
+          ) : null}
         </button>
       ) : null}
     </>

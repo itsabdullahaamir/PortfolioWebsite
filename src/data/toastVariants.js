@@ -23,6 +23,21 @@ export const toastVariants = {
     'A COPY HAS BEEN MADE.',
   ],
   /*
+    The floor (src/game/scenes/overworld.js): trying to enter a door that
+    is still locked. This is a failure, not an achievement, so it must
+    NOT reuse episodeFirstOpen's "the recruiter noticed you" voice — it
+    fired that exact pool on a locked door until this batch, which read
+    as nonsense (being praised for failing to get in). These lines stay
+    in the same short/ALL CAPS/one-line voice as the rest of the file but
+    are about the door itself, and point at the one thing that always
+    works: the stairwell to the Episode Explorer.
+  */
+  doorLocked: [
+    'THE DOOR IS BARRED.',
+    'THE STAIRS ARE OPEN, THOUGH.',
+    'NOT YET. TRY THE STAIRS.',
+  ],
+  /*
     Title-screen easter egg (components/TitleBackdrop.jsx): the one lit
     window on an otherwise dark building. Clicking it reveals someone
     still at a desk. Deliberately the only pool written in the first
