@@ -425,10 +425,10 @@ export default function PlainResume() {
               <img
                 src={`${import.meta.env.BASE_URL}${profile.photo}`}
                 alt={profile.name}
-                width="96"
-                height="96"
+                width="160"
+                height="160"
                 onError={() => setPhotoBroken(true)}
-                className="mb-3 h-24 w-24 border-2 border-ink object-cover grayscale lg:h-20 lg:w-20"
+                className="mb-3 h-40 w-40 border-2 border-ink object-cover lg:h-36 lg:w-36"
               />
             ) : null}
             <h1 className="font-display text-xl uppercase leading-tight text-ink sm:text-2xl lg:text-xl">
