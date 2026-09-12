@@ -94,7 +94,7 @@ export const games = [
     beats: [
       { label: 'AUG 2025', text: 'Teaching assistant, Programming Fundamentals.' },
       { label: 'THEN TWO MORE', text: 'Object Oriented Programming, and Discrete Structures.' },
-      { label: 'NOW', text: 'Linear Algebra, and a second round of Programming Fundamentals. Four courses, more than a hundred students.' },
+      { label: 'NOW', text: 'Linear Algebra, Operating Systems, and a second round of Programming Fundamentals. Five courses, more than a hundred students.' },
       { label: 'THE TUTORIALS', text: 'Recursion, graph traversals, memory management. Designed and graded the assessments too.' },
       { label: 'ZNOTES', text: 'Revision notes for IGCSE CS and A2 Physics, free for students who cannot pay for tutoring.' },
       { label: 'CHIP', text: 'Research assistant on an HEC-funded project: does disease incidence in Pakistan track the weather?' },

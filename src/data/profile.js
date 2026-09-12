@@ -38,7 +38,7 @@ export const profile = {
 
   headline: 'President @ Meri Kahani (FOES) · CS @ FAST ’28',
   summary:
-    'Computer Science undergraduate at FAST-NUCES, ranked first in a cohort of 313 on a 3.96 CGPA. Research assistant on an HEC-funded project linking disease incidence to weather and disaster patterns in Pakistan, teaching assistant across four courses, and a two-time hackathon runner-up. Works mostly on graph machine learning, entity resolution, and software that has to keep working offline.',
+    'Computer Science undergraduate at FAST-NUCES, ranked first in a cohort of 313 on a 3.96 CGPA. Research assistant on an HEC-funded project linking disease incidence to weather and disaster patterns in Pakistan, teaching assistant across five courses, and a two-time hackathon runner-up. Works mostly on graph machine learning, entity resolution, and software that has to keep working offline.',
 
   highlights: [
     // '#1' rather than '1 / 313': at 375px the tile gives the value 130px
@@ -49,7 +49,7 @@ export const profile = {
     // on one line. Same fact, no information lost.
     { value: '#1', label: 'Of 313 in cohort' },
     { value: '3.96', label: 'CGPA · 73 credits' },
-    { value: '4', label: 'Courses TA’d' },
+    { value: '5', label: 'Courses TA’d' },
     { value: '2×', label: 'Hackathon runner-up' },
   ],
 
@@ -159,7 +159,7 @@ export const profile = {
       org: 'Department of Computer Science, FAST-NUCES',
       timespan: 'Aug 2025 to present',
       detail:
-        'TA for Linear Algebra and Programming Fundamentals (Aug 2026 to present); previously Object Oriented Programming and Discrete Structures (Jan to Jun 2026), and an earlier round of Programming Fundamentals (Aug to Dec 2025). Led tutorials on recursion, graph traversals, and memory management for 100+ students; designed and graded technical assessments.',
+        'TA for Linear Algebra, Operating Systems, and Programming Fundamentals (Aug 2026 to present); previously Object Oriented Programming and Discrete Structures (Jan to Jun 2026), and an earlier round of Programming Fundamentals (Aug to Dec 2025). Led tutorials on recursion, graph traversals, and memory management for 100+ students; designed and graded technical assessments.',
     },
     {
       role: 'President (prev. Social Media Team)',

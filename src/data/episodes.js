@@ -120,7 +120,7 @@ export const episodes = [
       {
         header: 'THE TUTORIAL ROOM',
         timestamp: '2025 to present',
-        body: 'Teaching assistant across Programming Fundamentals, Discrete Structures, Object Oriented Programming, and now Linear Algebra alongside a second round of Programming Fundamentals. Ran tutorials on recursion, graph traversals, and memory management for more than a hundred students. Wrote and graded the assessments, and held office hours through every exam week.',
+        body: 'Teaching assistant across Programming Fundamentals, Discrete Structures, Object Oriented Programming, and now Linear Algebra, Operating Systems, and a second round of Programming Fundamentals. Ran tutorials on recursion, graph traversals, and memory management for more than a hundred students. Wrote and graded the assessments, and held office hours through every exam week.',
         tags: ['Teaching', 'FAST-NUCES', '100+ Students'],
         link: null,
       },
