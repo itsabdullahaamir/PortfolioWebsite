@@ -120,7 +120,7 @@ export const episodes = [
       {
         header: 'THE TUTORIAL ROOM',
         timestamp: '2025 to present',
-        body: 'Teaching assistant across Programming Fundamentals, Discrete Structures, Object Oriented Programming, and now Linear Algebra. Ran tutorials on recursion, graph traversals, and memory management for more than a hundred students. Wrote and graded the assessments, and held office hours through every exam week.',
+        body: 'Teaching assistant across Programming Fundamentals, Discrete Structures, Object Oriented Programming, and now Linear Algebra alongside a second round of Programming Fundamentals. Ran tutorials on recursion, graph traversals, and memory management for more than a hundred students. Wrote and graded the assessments, and held office hours through every exam week.',
         tags: ['Teaching', 'FAST-NUCES', '100+ Students'],
         link: null,
       },
@@ -165,7 +165,7 @@ export const episodes = [
       {
         header: 'RUNNING THE SOCIETY',
         timestamp: '2025 to present',
-        body: 'Joined the FAST Outreach & Engagement Society on the social media team, and a year later was leading it as President for the 2026-27 tenure. Ran Executive Council hiring, and now set the direction for campus outreach and engagement across the year.',
+        body: "Joined the FAST Outreach & Engagement Society on the social media team, and a year later was leading it as President for the 2026-27 tenure. Ran Executive Council hiring, and now runs the semester's event calendar jointly with FAST Computing Society: a freshman orientation, a guest-speaker session, and whatever comes after.",
         tags: ['President', 'Leadership', 'FOES'],
         link: null,
       },

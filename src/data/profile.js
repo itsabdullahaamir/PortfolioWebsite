@@ -159,13 +159,14 @@ export const profile = {
       org: 'Department of Computer Science, FAST-NUCES',
       timespan: 'Aug 2025 to present',
       detail:
-        'TA for Linear Algebra (Aug 2026 to present); previously Object Oriented Programming and Discrete Structures (Jan to Jun 2026) and Programming Fundamentals (Aug to Dec 2025). Led tutorials on recursion, graph traversals, and memory management for 100+ students; designed and graded technical assessments.',
+        'TA for Linear Algebra and Programming Fundamentals (Aug 2026 to present); previously Object Oriented Programming and Discrete Structures (Jan to Jun 2026), and an earlier round of Programming Fundamentals (Aug to Dec 2025). Led tutorials on recursion, graph traversals, and memory management for 100+ students; designed and graded technical assessments.',
     },
     {
       role: 'President (prev. Social Media Team)',
       org: 'FAST Outreach & Engagement Society (Meri Kahani)',
       timespan: 'Oct 2025 to present',
-      detail: 'Campus lead for the 2026-27 tenure. Ran Executive Council hiring; leads campus outreach and engagement.',
+      detail:
+        'Campus lead for the 2026-27 tenure. Ran Executive Council hiring; leads campus outreach and engagement, running the semester calendar jointly with FAST Computing Society, including a freshman orientation event and a guest-speaker session.',
     },
     {
       role: "CS Event Head",

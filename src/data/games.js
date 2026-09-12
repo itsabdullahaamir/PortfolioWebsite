@@ -94,7 +94,7 @@ export const games = [
     beats: [
       { label: 'AUG 2025', text: 'Teaching assistant, Programming Fundamentals.' },
       { label: 'THEN TWO MORE', text: 'Object Oriented Programming, and Discrete Structures.' },
-      { label: 'NOW', text: 'Linear Algebra. Four courses, more than a hundred students.' },
+      { label: 'NOW', text: 'Linear Algebra, and a second round of Programming Fundamentals. Four courses, more than a hundred students.' },
       { label: 'THE TUTORIALS', text: 'Recursion, graph traversals, memory management. Designed and graded the assessments too.' },
       { label: 'ZNOTES', text: 'Revision notes for IGCSE CS and A2 Physics, free for students who cannot pay for tutoring.' },
       { label: 'CHIP', text: 'Research assistant on an HEC-funded project: does disease incidence in Pakistan track the weather?' },
@@ -115,6 +115,7 @@ export const games = [
     beats: [
       { label: 'THE SOCIETY', text: 'Joined FAST Outreach & Engagement Society on the social media team.' },
       { label: 'PRESIDENT', text: 'A year later, leading it for the 2026-27 tenure. Ran Executive Council hiring.' },
+      { label: 'FCS EVENTS', text: 'Runs the semester calendar jointly with FAST Computing Society: an orientation, a guest-speaker session.' },
       { label: 'NASCON', text: 'CS Event Head for Speed Programming at Pakistan’s largest student-run computing competition.' },
       { label: 'THE JOB', text: 'Problem sets and rules, briefing the volunteer panel, coordinating sponsors and judges.' },
       { label: 'TEDX', text: 'Media and marketing for TEDxFASTIslamabad. HR Director for Isaar across every Islamabad chapter.' },

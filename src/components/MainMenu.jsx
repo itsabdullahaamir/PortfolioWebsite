@@ -23,14 +23,17 @@ import { sounds, useSound } from '../lib/sound.js';
  * Enter/Space handles activation) — a real menu, not decoration.
  *
  * CONTINUE is omitted entirely (not disabled) unless useProgress().hasSave.
- * PLAIN RESUME (item key 'extras', unchanged — only the label moved) is
- * the recruiter escape hatch — it goes straight to /plain, which is where
- * the actual "download PDF" control lives (see screens/PlainResume.jsx;
- * no static PDF asset exists yet, so that control uses window.print()).
- * Labeled plainly rather than in-universe ("EXTRAS") because a recruiter
- * scanning the menu needs to recognize it as the resume without reading
- * an explanatory line underneath — see the removed orientation-line note
- * further down this file.
+ * PLAIN RESUME (item key 'extras', unchanged — only the label and position
+ * moved) is the recruiter escape hatch — it goes straight to /plain, which
+ * is where the actual "download PDF" control lives (see
+ * screens/PlainResume.jsx; no static PDF asset exists yet, so that control
+ * uses window.print()). Labeled plainly rather than in-universe ("EXTRAS")
+ * because a recruiter scanning the menu needs to recognize it as the
+ * resume without reading an explanatory line underneath — see the removed
+ * orientation-line note further down this file. **It is now the first
+ * item, above NEW GAME** — direct user instruction so a recruiter sees
+ * the escape hatch as the top option rather than the third one, and so
+ * either audience (play, or just read) gets what suits them first.
  * OPTIONS expands inline motion/sound/typewriter toggles read/written via
  * useSettings() rather than a separate SettingsTray screen — that
  * component is out of this batch's scope (see src/components/CLAUDE.md).
@@ -69,6 +72,13 @@ export default function MainMenu({ reducedMotion }) {
   // handleKeyDown below. Nothing here is unreachable by keyboard alone.
 
   const items = [
+    // PLAIN RESUME sits first, above NEW GAME — direct user instruction:
+    // a recruiter should see the escape hatch as the top option, not have
+    // to scan past two game-shaped entries to find it. The 90-second rule
+    // (root CLAUDE.md §0) cuts both ways here: whichever a visitor came
+    // for, it's now the first thing read, top to bottom or by keyboard
+    // (Tab/arrow order follows this same array).
+    { key: 'extras', label: 'PLAIN RESUME', action: () => navigate('/plain') },
     // NEW GAME and EPISODES are deliberately different destinations now.
     // NEW GAME goes to the walkable floor: doors in order, a minigame
     // behind each. EPISODES goes to the Explorer, where everything is
@@ -84,7 +94,6 @@ export default function MainMenu({ reducedMotion }) {
         }
       : null,
     { key: 'episodes', label: 'EPISODE EXPLORER', action: () => navigate('/chapters') },
-    { key: 'extras', label: 'PLAIN RESUME', action: () => navigate('/plain') },
     { key: 'options', label: 'OPTIONS', action: () => setOptionsOpen((open) => !open) },
   ].filter(Boolean);
 
