@@ -96,18 +96,41 @@ import { useSettings } from '../context/SettingsContext.jsx';
  * Tab order is sane, only paint order moves.
  *
  * PRINT: `handleDownload` keeps the existing `showToast('pdfDownload')`
- * + `window.print()` pattern, but now also flips a `printing` boolean
- * BEFORE calling print — combined with `beforeprint`/`afterprint` window
- * listeners (which fire for a bare Ctrl+P too, not just this button),
- * this is what "expand everything before the PDF is generated" actually
- * means: `printing` ORs into `isEntryOpen()` alongside the filter's own
- * force-open, so every `<details>` renders open the instant either
- * trigger fires, and reverts the instant `afterprint` fires — without
- * ever touching the user's own `openIds` set, so their manual
- * expand/collapse choices survive a print untouched. See `../index.css`
- * for the `@media print` block itself (hides `.dossier-chrome`, forces
- * black-on-white, single column, visible `<details>` content as a CSS
- * belt-and-braces backstop, and appends URLs after external links).
+ * + `window.print()` pattern, and flips a `printing` boolean before
+ * calling print so `isEntryOpen()` treats every entry as open — but a
+ * real live-reported bug ("I downloaded this and the details are
+ * locked") turned up in the actual downloaded PDF, and neither of the
+ * two mechanisms this doc comment used to rely on is enough on its own.
+ * (1) `setPrinting(true)` schedules a React re-render; `window.print()`
+ * called synchronously right after does NOT wait for that render to
+ * commit — verified live, `document.querySelectorAll('.dossier
+ * details[open]')` was still 0 at the exact instant `window.print()`
+ * ran. (2) The `@media print` CSS backstop in `../index.css` (forcing
+ * `.dossier details > div { display: block }`) does not save it either:
+ * current Chrome collapses closed `<details>` content through an
+ * internal mechanism tied to the real `open` attribute (a
+ * `::details-content` pseudo-element driven box, not a plain
+ * `display: none` any `display` override can defeat) — confirmed by
+ * printing this route through Chrome's actual print pipeline (CDP
+ * `Page.printToPDF`) with the CSS override in place and finding every
+ * entry's body text missing from the extracted PDF text regardless.
+ * The fix is `expandAllDetailsInDom()`: walk `.dossier details` and set
+ * the real `.open = true` property directly, synchronously, immediately
+ * before `window.print()` runs (in `handleDownload`) and inside the
+ * `beforeprint` listener (for a bare Ctrl+P) — not relying on a React
+ * commit landing in time. React's own re-render (from `printing`) still
+ * happens right after and agrees with the DOM once it commits, and
+ * `afterprint` flips `printing` back to false, which re-renders every
+ * entry's `open` back to the visitor's own `openIds`, so this never
+ * permanently touches their manually-curated set. Verified end-to-end
+ * against a real generated PDF (not just DOM state): clicked the actual
+ * Download button through Chrome's real print pipeline via CDP, and all
+ * 30 collapsible entries' body text is present in the output (0 were
+ * present before the fix, in both a real user-downloaded PDF and a
+ * from-scratch repro). See `../index.css` for the `@media print` block
+ * itself (still needed for the black-on-white/single-column/chrome-
+ * hiding rules, just not sufficient on its own for the collapse/expand
+ * behavior).
  */
 
 /** Deterministic id fragment from arbitrary content — never an array index. */
@@ -384,13 +407,35 @@ export default function PlainResume() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visibleSectionsKey]);
 
-  // Print. `beforeprint`/`afterprint` cover a bare Ctrl+P, which never
-  // touches `handleDownload` at all; `handleDownload` also sets
-  // `printing` directly so the DOM has already re-rendered expanded
-  // before `window.print()` hands control to the browser, rather than
-  // relying solely on event timing.
+  // Print. A real bug lived here: `setPrinting(true)` schedules a React
+  // re-render, but `window.print()` called synchronously right after it
+  // does NOT wait for that render to commit — verified live, the DOM
+  // still had zero open `<details>` elements at the exact instant
+  // `window.print()` ran. The `@media print` CSS backstop in
+  // `../index.css` doesn't save it either: current Chrome collapses
+  // `<details>` content via an internal mechanism (bound to the `open`
+  // attribute, not a plain `display: none` any CSS override can defeat)
+  // — confirmed by printing this route headless and finding every entry
+  // body missing even though the CSS forced `display: block`. The fix is
+  // to set the real `open` attribute on every `<details>` node directly,
+  // synchronously, immediately before `window.print()` runs, rather than
+  // trust a React commit to land in time. `beforeprint` gets the same
+  // treatment for a bare Ctrl+P. React's own re-render (from `printing`)
+  // still happens right after and agrees with the DOM once it commits;
+  // `afterprint` flips `printing` back to false, which re-renders every
+  // entry's `open` back to the visitor's own `openIds`, so nothing here
+  // permanently touches their manually-curated set.
+  const expandAllDetailsInDom = () => {
+    document.querySelectorAll('.dossier details').forEach((node) => {
+      node.open = true;
+    });
+  };
+
   useEffect(() => {
-    const onBeforePrint = () => setPrinting(true);
+    const onBeforePrint = () => {
+      expandAllDetailsInDom();
+      setPrinting(true);
+    };
     const onAfterPrint = () => setPrinting(false);
     window.addEventListener('beforeprint', onBeforePrint);
     window.addEventListener('afterprint', onAfterPrint);
@@ -403,6 +448,7 @@ export default function PlainResume() {
   const handleDownload = () => {
     showToast('pdfDownload');
     setPrinting(true);
+    expandAllDetailsInDom();
     window.print();
   };
 
