@@ -101,26 +101,32 @@ import {
  * diminishing, then unstable, returns rather than a further real gain.
  *
  * ============================================================
- * THE RULE NOBODY MAY "FIX": YOU CANNOT PLACE FIRST.
+ * THE ENDING, AND WHY IT CHANGED
  * ============================================================
- * At hour 48 the world stops scrolling. The player settles onto the
- * SECOND-PLACE roof, and the FIRST-PLACE marker stands on a taller tower
- * about one and a half hours further on -- fully visible, lit in the only
- * --signal on the screen, and permanently out of reach. The player's x
- * never changes by a single pixel in this scene, and the world has
- * stopped feeding them distance, so there is no input, no route and no
- * skill level that closes that gap. (Measured at rest: 476px, forever.)
- * It is not a bug and it is not an unfinished ending.
+ * For several batches this scene ENDED ON SECOND PLACE on purpose. The
+ * player settled onto the SECOND-PLACE roof at hour 48 and the
+ * FIRST-PLACE tower stood 476px further on, lit, visible and frozen out
+ * of reach, because the record this episode carried was three second
+ * places and a national top ten. A game that handed you gold the man had
+ * not taken would have been a better toy and a dishonest resume.
  *
- * The record this episode carries is three second places and a national
- * top ten (see the beats in src/data/games.js -- this file never states a
- * fact of its own). A version of this game where you can take gold would
- * be a better toy and a dishonest resume. If a future change makes the
- * marker reachable, it has removed the point of the game.
+ * The record changed. The national final of atomcamp's National AI
+ * Hackathon '26 was won outright (see the beats in src/data/games.js --
+ * this file still never states a fact of its own), so an ending frozen
+ * short of first place now understates the record instead of protecting
+ * it. The finale therefore keeps scrolling the last FIRST_PLACE_LEAD
+ * hours after the clock stops: the player passes over the second-place
+ * roof, climbs, and lands on the lit tower.
  *
- * Reaching hour 48 STILL emits outcome 'win'. The win is finishing the
- * night, not placing first -- clearing the door must never depend on an
- * outcome the game refuses to grant.
+ * THE RULE THAT DID NOT CHANGE, and the one worth guarding: the ending
+ * states exactly the result that happened, no more. It was never "the
+ * player must lose." If the record is ever re-cut shorter, cut the
+ * ending back with it rather than leaving a win on screen that nobody
+ * earned.
+ *
+ * Reaching hour 48 STILL emits outcome 'win' regardless, and always did.
+ * Clearing the door depends on finishing the night, never on the shape
+ * of the closing image.
  */
 
 /* -- The world ------------------------------------------------------
@@ -132,10 +138,24 @@ import {
 const HOUR_PX = 340;
 const SCROLL = 210;
 const FALLBACK_END_HOUR = 48;
-/** How far past the finish the unreachable first-place tower stands, in
- *  hours. 1.4 puts it at screen x ~686 of 960: unmistakably ahead, and
+/** How far past hour 48 the first-place tower stands, in hours. During
+ *  the run it sits at screen x ~686 of 960 -- unmistakably ahead, and
  *  unmistakably not here. */
 const FIRST_PLACE_LEAD = 1.4;
+/** How far BEFORE the first-place tower the second-place roof sits, in
+ *  hours, and how wide that roof is. Both are pinned by the REST FRAME,
+ *  not chosen for narrative reasons, and the window is narrow enough that
+ *  a first guess of 0.45 was wrong: at rest secondCx = PLAYER_X - BACK *
+ *  HOUR_PX, so 0.45 put the roof's right edge at 132 against the
+ *  first-place tower's left edge at 125 -- the two overlapped by 7px and
+ *  the dashed route between them ran BACKWARDS. 0.5 with a narrower
+ *  110px roof lands secondCx at 40: the roof spans -15..95, leaving a
+ *  30px gap before the first tower, and the '2ND' label (~48px) sits
+ *  fully on screen. Past about 0.6 the label starts falling off the left
+ *  edge and the roof the player just flew over stops being readable in
+ *  the closing image, which is the whole reason it is drawn. */
+const SECOND_PLACE_BACK = 0.5;
+const SECOND_PLACE_W = 110;
 
 const PLAYER_X = 210;
 const GROUND_INSET = 52;
@@ -192,7 +212,7 @@ const GAP_EASE = 2.2;
 const GAP_STEP = 108;
 const WINDOW_ROW = 34;
 
-const FINALE_TIME = 2.8;
+const FINALE_TIME = 4.2;
 const TRAIL = 14;
 
 /**
@@ -344,6 +364,9 @@ export function createFortyEight(config) {
 
   const beatHours = readBeatHours(beats);
   const endHour = beatHours.length ? beatHours[beatHours.length - 1] : FALLBACK_END_HOUR;
+  /** World x the camera comes to rest at: the first-place tower, not the
+   *  end of the clock. The finale scrolls from endHour * HOUR_PX to here. */
+  const finishWorldX = (endHour + FIRST_PLACE_LEAD) * HOUR_PX;
   const beatHourSet = new Set(beatHours.map((h) => Math.round(h)));
 
   let obstacles = [];
@@ -481,11 +504,20 @@ export function createFortyEight(config) {
       if (trailFill < TRAIL) trailFill += 1;
 
       if (phase === 'finale') {
-        // Scripted settle onto the second-place roof. If the player
-        // arrived below it -- rare, since the last three hours are open
-        // sky and the buildings before them push you high -- lift them
-        // rather than leaving them clipped into the tower.
-        const restY = secondRoofY(H) - HALF_H;
+        // The clock has stopped but the camera has not: keep scrolling
+        // the last FIRST_PLACE_LEAD hours so the first-place tower slides
+        // under the player, who passes over the second-place roof on the
+        // way. Collisions are already skipped on this path and
+        // buildObstacles never places anything past endHour - 3, so there
+        // is nothing out here to hit.
+        if (worldX < finishWorldX) {
+          worldX = Math.min(finishWorldX, worldX + SCROLL * dt);
+        }
+
+        // Scripted settle onto the first-place roof. The player is
+        // normally below it on arrival, so this is usually a climb rather
+        // than a descent; the ease works in both directions.
+        const restY = firstRoofY(H) - HALF_H;
         if (playerY >= restY) {
           // Ease down to the roof, then LATCH. Gravity is still applied
           // above this line, so an ease on its own never actually
@@ -499,7 +531,9 @@ export function createFortyEight(config) {
             landed = true;
             playerY = restY;
           } else {
-            playerY += (restY - playerY) * Math.min(1, dt * 7);
+            // Slower than the old 7: the climb now has to read across the
+            // ~2.3s approach rather than snap into place in half a second.
+            playerY += (restY - playerY) * Math.min(1, dt * 2.6);
           }
           vy = 0;
         }
@@ -762,21 +796,24 @@ const firstRoofY = (H) => H * 0.48;
  * They are DRAWN, never collided with: the outcome of the run is decided
  * by the clock, not by whether you clipped a corner on the way in.
  *
- * The first-place tower carries the ONLY --signal on this screen. It
- * stands at PLAYER_X + FIRST_PLACE_LEAD * HOUR_PX; the player's x never
- * moves, and the world stops scrolling the instant hour 48 lands, so the
- * distance between the two roofs is frozen at the moment the run ends and
- * cannot be closed by anything the player does. See the header comment --
- * this is the design, not an unfinished ending. Do not add a bridge, a
- * boost, a bonus round or a "perfect run" path to it.
+ * The first-place tower carries the ONLY --signal on this screen and is
+ * where the camera comes to rest, so the closing image is the player on
+ * the lit roof with the second-place roof behind and below them. The two
+ * are positioned relative to EACH OTHER rather than to the clock
+ * (SECOND_PLACE_BACK hours before the first), because the first tower's
+ * place in the frame is fixed by finishWorldX and the second one only has
+ * to stay readable beside it.
+ *
+ * This used to be an unreachable gap; see the header comment for why it
+ * is not any more, and for the rule that replaced it.
  */
 function drawFinishTowers(g, ctx, worldX, endHour, groundY, finale) {
   const { W, H, palette } = ctx;
-  const secondCx = endHour * HOUR_PX - worldX + PLAYER_X;
+  const firstCx = (endHour + FIRST_PLACE_LEAD) * HOUR_PX - worldX + PLAYER_X;
+  const secondCx = firstCx - SECOND_PLACE_BACK * HOUR_PX;
   if (secondCx > W + 260) return;
 
-  const firstCx = (endHour + FIRST_PLACE_LEAD) * HOUR_PX - worldX + PLAYER_X;
-  const secondW = 150;
+  const secondW = SECOND_PLACE_W;
   const secondY = secondRoofY(H);
   const firstW = 170;
   const firstY = firstRoofY(H);
@@ -827,16 +864,16 @@ function drawFinishTowers(g, ctx, worldX, endHour, groundY, finale) {
     });
   }
 
-  // A dashed run-off from the second roof that simply stops in mid-air.
-  // The gap is the statement; this only makes sure it is read as a gap
-  // rather than as scenery that happens to be in the way.
+  // The climb from the second roof to the first, dashed in. This used to
+  // be a run-off that stopped in mid-air, drawing the gap; it now draws
+  // the route, because the route exists.
   if (finale) {
     g.strokeStyle = rgba(palette.bone, 0.26);
     g.lineWidth = 2;
     g.setLineDash([8, 12]);
     g.beginPath();
     g.moveTo(secondCx + secondW / 2, secondY);
-    g.lineTo(secondCx + secondW / 2 + 132, secondY);
+    g.lineTo(firstCx - firstW / 2, firstY);
     g.stroke();
     g.setLineDash([]);
   }

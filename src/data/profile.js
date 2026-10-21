@@ -38,7 +38,7 @@ export const profile = {
 
   headline: 'President @ Meri Kahani (FOES) · CS @ FAST ’28',
   summary:
-    'Computer Science undergraduate at FAST-NUCES, ranked first in a cohort of 313 on a 3.96 CGPA. Research assistant on an HEC-funded project linking disease incidence to weather and disaster patterns in Pakistan, teaching assistant across five courses, and a two-time hackathon runner-up. Works mostly on graph machine learning, entity resolution, and software that has to keep working offline.',
+    'Computer Science undergraduate at FAST-NUCES, ranked first in a cohort of 313 on a 3.96 CGPA. Research assistant on an HEC-funded project linking disease incidence to weather and disaster patterns in Pakistan, and teaching assistant across five courses. Placed in all six hackathons entered in 2026, taking first at the national final of atomcamp’s National AI Hackathon. Works mostly on graph machine learning, entity resolution, and software that has to keep working offline.',
 
   highlights: [
     // '#1' rather than '1 / 313': at 375px the tile gives the value 130px
@@ -50,7 +50,15 @@ export const profile = {
     { value: '#1', label: 'Of 313 in cohort' },
     { value: '3.96', label: 'CGPA · 73 credits' },
     { value: '5', label: 'Courses TA’d' },
-    { value: '2×', label: 'Hackathon runner-up' },
+    // 'National final', not 'National AI Hackathon', for the same
+    // reason the tile above reads '#1' rather than '1 / 313': at
+    // 375px a tile label gets 131px, which is about sixteen
+    // characters of the 11px tracked face. 'NATIONAL AI HACKATHON'
+    // measured 21 characters and wrapped to two lines, rendering
+    // the second row of the band 16px taller than the first.
+    // profile.summary names the competition in full immediately
+    // below, so nothing is lost by shortening it here.
+    { value: '1st', label: 'National final' },
   ],
 
   contact: {
@@ -132,8 +140,12 @@ export const profile = {
     'Gold Medal, Fall 2025: 1st position, perfect 4.00 SGPA (Rector’s List).',
     'Gold Medal, Fall 2024: top academic performance.',
     'Silver Medal, Spring 2025: top academic performance.',
-    '2nd place, HackSummer’26 (Microsoft Club & Canva Student Community, GIKI).',
-    '2nd place and national finalist (top 10 in Pakistan), atomcamp National AI Hackathon ’26.',
+    '1st place, National Finale, atomcamp National AI Hackathon ’26 (top 10 teams in Pakistan).',
+    '2nd place, Islamabad regional round, atomcamp National AI Hackathon ’26 (EduGap, 100 teams).',
+    '2nd place, HackSummer’26 (Microsoft Club-GIKI & Canva Community GIKI).',
+    'Top four, Barani Hackathon ’26.',
+    '4th place, n8n Hackathon by S&P Global, held at FAST-NUCES ’26.',
+    '5th place, CUST Hackathon ’26.',
     'Runners-up, Promptopia ’26 (generative-AI competition, Google Developer Groups, FAST-NUCES).',
     '2nd Best Delegate, AIESEC Islamabad Youth Speak Forum ’25.',
     'Finalist, PakCrypt Amateur Round 2023 (NCCS, Air University Islamabad).',
@@ -166,21 +178,21 @@ export const profile = {
       org: 'FAST Outreach & Engagement Society (Meri Kahani)',
       timespan: 'Oct 2025 to present',
       detail:
-        'Campus lead for the 2026-27 tenure. Ran Executive Council hiring; leads campus outreach and engagement, running the semester calendar jointly with FAST Computing Society, including a freshman orientation event and a guest-speaker session.',
+        'Joined on the social media team in October 2025 and took over as campus lead in June 2026 for the 2026-27 tenure. Ran Executive Council hiring; leads campus outreach and engagement, running the semester calendar jointly with FAST Computing Society. Events so far: an ice-breaking day for the incoming CS batch, and a fireside session with Tabarak Ur Rehman, the first person to run the length of Pakistan.',
     },
     {
       role: "CS Event Head",
       org: "NaSCon, FAST-NUCES",
-      timespan: "2026 (upcoming)",
+      timespan: "Feb 2026 to present",
       detail:
-        "Event Head for Speed Programming at Pakistan’s largest student-run computing competition. Responsible for setting problem sets and rules, briefing the volunteer panel, coordinating with sponsors and judges, and running the event on competition day.",
+        "Event Head for Speed Programming at Pakistan’s largest student-run computing competition, held 18 October 2026: 99 teams and 270 registered participants competing for a 150,000 rupee prize pool. Set the problem sets and rules, briefed a sixteen-person volunteer panel, coordinated sponsors and judges, and ran the floor through a network failure on the day. Event Head for C++ FaceOff at the same competition from February to July 2026.",
     },
     {
       role: 'Director of Human Resources',
       org: 'Isaar',
-      timespan: 'Jul 2025 to present',
+      timespan: 'Jun 2026 to present',
       detail:
-        'Promoted from Deputy Director of HR. Manages HR queries across all Islamabad chapters and coordinates between them.',
+        'Promoted from Deputy Director of HR, a post held from July 2025 to June 2026. Manages HR queries across all Islamabad chapters and coordinates between them.',
     },
     {
       role: 'Media & Marketing Executive',
@@ -207,9 +219,9 @@ export const profile = {
 
   alsoBuilt: [
     {
-      name: 'Economic Price Similarity Network Analysis',
+      name: 'PBSVertex: CPI similarity networks',
       detail:
-        'Modeled inter-city market connectivity from Pakistani CPI data as a graph, ranking cities by betweenness, closeness, and eigenvector centrality. Python, NetworkX, pandas.',
+        'Modeled inter-city market connectivity from Pakistani CPI data as a graph, ranking cities by betweenness, closeness, and eigenvector centrality. Shipped as an interactive site covering all seven CPI categories, three weighting schemes, and Hasse diagrams for year-to-year ordering. Built with Dyen Asif and Haider Ramzan. Python, NetworkX, pandas.',
       url: null,
     },
     {

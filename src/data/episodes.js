@@ -112,7 +112,7 @@ export const episodes = [
     id: 'teaching',
     number: 2,
     title: 'TEACHING & RESEARCH',
-    subtitle: 'Four courses as TA, an HEC-funded lab, two research threads',
+    subtitle: 'Five courses as TA, an HEC-funded lab, two research threads',
     cover: '/covers/ep2.webp',
     scene: 'study',
     plainRole: 'covered',
@@ -165,20 +165,21 @@ export const episodes = [
       {
         header: 'RUNNING THE SOCIETY',
         timestamp: '2025 to present',
-        body: "Joined the FAST Outreach & Engagement Society on the social media team, and a year later was leading it as President for the 2026-27 tenure. Ran Executive Council hiring, and now runs the semester's event calendar jointly with FAST Computing Society: a freshman orientation, a guest-speaker session, and whatever comes after.",
+        body: "Joined the FAST Outreach & Engagement Society on the social media team, and eight months later was leading it as President for the 2026-27 tenure. Ran Executive Council hiring, and now runs the semester's event calendar jointly with FAST Computing Society: a freshman orientation, a guest-speaker session, and whatever comes after.",
         tags: ['President', 'Leadership', 'FOES'],
         link: null,
       },
       {
         header: 'EVENT HEAD, NASCON',
-        // Corrected against profile.js: the role is CS Event Head for
-        // Speed Programming and the event has not happened yet. An
-        // earlier version of this panel read "Event Head for C++
-        // FaceOff, then Speed Programming" dated "2026 — Present",
-        // which asserted a completed prior round that the resume no
-        // longer claims. Do not restore the earlier wording.
-        timestamp: '2026 (upcoming)',
-        body: "CS Event Head for Speed Programming at NaSCon, Pakistan's largest student-run computing competition: setting the problem sets and rules, briefing the volunteer panel, and coordinating with sponsors and judges. Alongside it, media and marketing for TEDxFASTIslamabad, and HR Director for Isaar across every Islamabad chapter.",
+        // The event ran on 18 October 2026, so this panel is no longer
+        // written in the future tense. The C++ FaceOff round, which an
+        // earlier pass removed as an unverified claim, is restored: the
+        // live LinkedIn record shows it as a completed CS Event Head post
+        // from February to July 2026, which is the evidence that pass
+        // was missing. The scale figures come from the organiser's own
+        // post-event report, not from an estimate.
+        timestamp: '2026',
+        body: "CS Event Head for Speed Programming at NaSCon, Pakistan's largest student-run computing competition: 99 teams, 270 participants, and a 150,000 rupee prize pool, run with a volunteer panel through a network failure on the day. Ran C++ FaceOff for the same event earlier that year. Alongside it, media and marketing for TEDxFASTIslamabad, and HR Director for Isaar.",
         tags: ['NaSCon', 'Event Management', 'TEDx', 'HR'],
         link: null,
       },
@@ -208,7 +209,7 @@ export const episodes = [
     id: 'competitions',
     number: 4,
     title: 'COMPETITIONS',
-    subtitle: 'Three second places and a national top ten',
+    subtitle: 'Six hackathons, a national win, and two second places',
     cover: '/covers/ep4.webp',
     scene: 'nightshift',
     plainRole: 'competitions',
@@ -221,6 +222,13 @@ export const episodes = [
         link: null,
       },
       {
+        header: 'OUTSIDE THE PODIUM',
+        timestamp: '2026',
+        body: 'Three hackathon weekends in a row ended just outside the podium: fourth at the n8n hackathon S&P Global ran at FAST-NUCES, fifth at CUST, and top four at Barani. Six hackathons went on the board in one year. These were the three that did not finish in the top two.',
+        tags: ['Hackathons', 'S&P Global', 'CUST', 'Barani'],
+        link: null,
+      },
+      {
         header: 'PARWANA, SECOND PLACE',
         timestamp: '2026',
         body: "Built in three hours at HackSummer'26 and took second place. It checks a Pakistani overseas-job message against the government's own BEOE register of 5,251 licensed agencies and returns a verdict with a dated evidence chain. No model call sits on the path from message to verdict; six classical extraction stages and a state machine do the work.",
@@ -228,11 +236,22 @@ export const episodes = [
         link: 'https://github.com/itsabdullahaamir/parwana',
       },
       {
-        header: 'EDUGAP, NATIONAL FINALS',
+        header: 'EDUGAP, SECOND OF A HUNDRED',
         timestamp: '2026',
-        body: "Second place at atomcamp's National AI Hackathon, and a place in the national top ten. EduGap reads a curriculum, scrapes Rozee.pk for live job postings, and reports where the two have drifted apart. Contributed the architecture and planning and led the pitch; the engineering belonged to two teammates.",
+        body: "Second place out of a hundred teams at the Islamabad regional round of atomcamp's National AI Hackathon, which bought a seat in the national final. EduGap reads a curriculum, scrapes Rozee.pk for live job postings, and reports where the two have drifted apart. Contributed the architecture and planning and led the pitch; the engineering belonged to two teammates.",
         tags: ['RAG', 'Agents', 'Architecture', 'Pitch'],
         link: 'https://github.com/rayyan-41/EduGap_Curriculum-Job-Listings-Gap-Identifier',
+      },
+      {
+        // The only outright win on the whole site. Deliberately states the
+        // placement and nothing about the build: the finale project has not
+        // been recorded here yet, and a panel that guessed at one would be
+        // the exact failure mode src/data/CLAUDE.md warns about.
+        header: 'THE NATIONAL FINAL',
+        timestamp: '2026',
+        body: 'The regional result put the team among the last ten in the country, and the national final of atomcamp’s National AI Hackathon ended in first place. Every other entry on this page is a near-miss of some size. This is the one that was won outright.',
+        tags: ['National Final', 'First Place', 'atomcamp'],
+        link: null,
       },
       {
         header: 'TAXNET, ONE GRAPH',
@@ -252,7 +271,7 @@ export const episodes = [
     choicePrompt: 'Forty-eight hours, no sleep. Was it worth it?',
     choices: [
       { label: 'Where did the competing start?', target: 'panel-0' },
-      { label: 'Show me something with real numbers.', target: 'panel-3' },
+      { label: 'What did you actually win?', target: 'panel-4' },
       { label: 'Skip ahead.', target: 'next', silent: true },
     ],
   },

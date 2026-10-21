@@ -19,14 +19,19 @@
  * "Collect the skill coins" is the failure mode. Every game below is
  * built so that the thing you do with your hands is the thing the panel
  * describes: you stack semesters, you triage a room of students, you
- * watch four meters drain because you cannot save all four, you survive
- * a night you cannot win, you wire five modules onto one shared graph.
+ * watch four meters drain because you cannot save all four, you fly a
+ * night that takes six tries to finish, you wire five modules onto one
+ * shared graph.
  *
  * AND THE HONEST ONE
- * fortyEight is deliberately unwinnable past second place. The real
- * record is three second places and a national top ten; a game that let
- * you take gold would be a nicer game and a dishonest one. Do not
- * "fix" it.
+ * fortyEight used to be deliberately unwinnable past second place,
+ * because the record it carried was three second places and a national
+ * top ten. The record changed: the national final of atomcamp's National
+ * AI Hackathon '26 was won outright, so the tower at the end of that
+ * game is now reachable. The rule was never "the player must lose" --
+ * it was "the game must not claim a result that did not happen," and
+ * that rule is unchanged. If the record ever contracts again, the ending
+ * contracts with it.
  */
 
 /**
@@ -132,19 +137,20 @@ export const games = [
     verb: 'Endurance',
     brief: 'Hold to climb, release to fall. Get through the night.',
     controls: { pointer: 'Hold anywhere', key: 'Hold Space' },
-    goal: 'Reach hour 48. You cannot place first; nobody here ever did.',
-    why: 'Each hour survived is a competition entry, in the order they happened. The marker you cannot reach at the end is the first place he never took.',
+    goal: 'Reach hour 48, then the lit tower past it. First place is on the board now.',
+    why: 'Each hour survived is a competition entry, in the order they happened. The lit tower at the end is the national final, and it is the one that was actually won.',
     beats: [
       { label: 'HOUR 0', text: 'PakCrypt, 2023. Three national rounds. First time competing against anyone outside school.' },
-      { label: 'HOUR 6', text: 'Parwana, built in three hours at HackSummer’26. Second place.' },
-      { label: 'HOUR 14', text: 'It checks an overseas-job message against the BEOE register of 5,251 licensed agencies.' },
-      { label: 'HOUR 20', text: 'No model call on the path from message to verdict. Six classical stages and a state machine.' },
-      { label: 'HOUR 28', text: 'EduGap: a curriculum against live Rozee.pk postings, reporting where they drifted apart.' },
-      { label: 'HOUR 34', text: 'Second place nationally, and a top-ten place. The architecture and the pitch were his; the engineering was two teammates’.' },
+      { label: 'HOUR 6', text: 'Fourth at the n8n hackathon S&P Global ran at FAST-NUCES. First of six in one year.' },
+      { label: 'HOUR 12', text: 'Fifth at CUST, then top four at Barani. Close enough to keep entering, not close enough yet.' },
+      { label: 'HOUR 18', text: 'EduGap: a curriculum against live Rozee.pk postings, reporting where they drifted apart.' },
+      { label: 'HOUR 24', text: 'Second of a hundred teams at the Islamabad regional. It bought a seat in the national final.' },
+      { label: 'HOUR 30', text: 'Parwana, built in three hours at HackSummer’26. Second place again.' },
+      { label: 'HOUR 36', text: 'No model call on the path from message to verdict. Six classical stages and a state machine.' },
       { label: 'HOUR 42', text: 'TaxNet: entity resolution to F1 near 0.90 over 110,000+ records, then PageRank across the graph.' },
-      { label: 'HOUR 48', text: 'Promptopia, runners-up. Three second places and a national top ten.' },
+      { label: 'HOUR 48', text: 'The national final of atomcamp’s National AI Hackathon. First place, won outright.' },
     ],
-    outro: 'Second, second, second. You got as far as anyone got, which was the point.',
+    outro: 'Fourth, fifth, second, second. The sixth one was the tower at the end.',
   },
   {
     episodeId: 'projects',
