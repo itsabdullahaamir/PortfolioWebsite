@@ -114,7 +114,7 @@ export default function Floor() {
     if (!prompt) return 'Walk left or right to find a door.';
     if (prompt.kind === 'stairs') return 'The stairs. The Episode Explorer, every episode unlocked.';
     if (prompt.kind === 'desk') return 'The desk. The plain resume, every fact on one page.';
-    if (prompt.kind === 'pinboard') return 'The pinboard. The design work, ninety pieces.';
+    if (prompt.kind === 'pinboard') return 'The pinboard. The design work: identity systems and editorial design.';
     if (!prompt.unlocked) return `Episode ${prompt.number}, ${prompt.title}. Locked: clear the door before it, or take the stairs.`;
     return `Episode ${prompt.number}, ${prompt.title}. ${prompt.cleared ? 'Cleared. Enter to replay.' : 'Enter to play.'}`;
   })();

@@ -4,8 +4,13 @@ import { designCategories, designProfile, designWorks, frameIndexOf } from '../d
 import { useSound } from '../lib/sound.js';
 
 /**
- * `/design` — the graphic-design surface. Ninety pieces of real artwork
- * across three organisations.
+ * `/design` — the graphic-design surface. A selected set of real
+ * artwork across three organisations.
+ *
+ * THE SET IS CURATED, NOT COMPLETE, and the ordering is quality order,
+ * strongest first. Both are deliberate and both are recorded in
+ * ../data/design.js, which is where to change either. This screen just
+ * renders `designWorks` in array order.
  *
  * THIS ROUTE IS A SHARED LINK. The site owner sends `/design` to people
  * as proof of the design work. Do not rename it, fold it into another
@@ -63,8 +68,8 @@ import { useSound } from '../lib/sound.js';
  * (see `../data/design.js`'s image contract): a 560px thumbnail for the
  * tile and a 1200px version for the lightbox. Tiles are `loading="lazy"`
  * and reserve their box from the `w`/`h` recorded in the data, so a
- * ninety-tile grid of mixed square, portrait, tall and landscape art
- * does not reflow as the bytes land. The full-size file for a given
+ * grid of mixed square, portrait, tall and landscape art does not
+ * reflow as the bytes land. The full-size file for a given
  * frame is only ever requested when that frame is opened, which is what
  * keeps a gallery this size inside the spec section 7 load budget.
  *

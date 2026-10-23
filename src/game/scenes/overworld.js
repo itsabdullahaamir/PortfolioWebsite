@@ -111,7 +111,7 @@ export function createOverworld(config) {
   // caption bolted over it.
   const spots = [
     { kind: 'desk', x: DESK_X, label: 'THE DESK' },
-    { kind: 'pinboard', x: PINBOARD_X, label: 'THE PINBOARD', hint: 'Ninety pieces of design work' },
+    { kind: 'pinboard', x: PINBOARD_X, label: 'THE PINBOARD', hint: 'Identity systems and editorial design' },
     { kind: 'stairs', x: STAIRS_X, label: 'THE STAIRS', hint: 'Episode Explorer: every episode, unlocked' },
     ...doors.map((door, i) => ({
       kind: 'door',
