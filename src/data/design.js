@@ -93,8 +93,8 @@ export const designProfile = {
 
   // The 10-second band, same idea as profile.js's highlights[].
   highlights: [
-    { value: '51', label: 'Pieces shown' },
-    { value: '16', label: 'Series and systems' },
+    { value: '57', label: 'Pieces shown' },
+    { value: '17', label: 'Series and systems' },
     { value: '3', label: 'Organisations' },
   ],
 
@@ -167,13 +167,15 @@ export const designWorks = [
     title: 'THE LEGACY OF ASIA CUP',
     kind: 'Editorial series',
     note:
-      'A retrospective run where each frame carries one match. The archive photograph is dropped into a white border so it reads as something pulled out of a box rather than posted fresh, the series title stays locked at the top of every frame so the run is recognisable mid-scroll, and the only thing that moves is the pull quote naming what that particular match was.',
-    tags: ['Editorial', 'Series template', 'Archive imagery'],
+      'A retrospective run where each frame carries one match. The archive photograph is dropped into a white border so it reads as something pulled out of a box rather than posted fresh, the series title stays locked at the top of every frame so the run is recognisable mid-scroll, and the only thing that moves is the pull quote naming what that particular match was. The last two frames are the pages behind those covers, where the same post has to carry a hundred words: the photograph shrinks, a torn white card takes the top half, and the arrow motif from the cover becomes the margin rule that keeps the block from floating.',
+    tags: ['Editorial', 'Series template', 'Long copy'],
     frames: [
       { name: 'eia-asiacup-1', caption: 'The showdown', w: 1080, h: 1080 },
       { name: 'eia-asiacup-2', caption: 'Completely outclassed', w: 1080, h: 1080 },
       { name: 'eia-asiacup-3', caption: 'The all-round masterclass', w: 1080, h: 1080 },
       { name: 'eia-asiacup-5', caption: 'The home derby', w: 1080, h: 1080 },
+      { name: 'eia-asiacup-page-1', caption: 'Inner page, opening', w: 1080, h: 1080 },
+      { name: 'eia-asiacup-page-2', caption: 'Inner page, closing', w: 1080, h: 1080 },
     ],
   },
   {
@@ -193,8 +195,25 @@ export const designWorks = [
     ],
   },
   {
-    id: 'ec-groups',
+    id: 'eia-analysis',
     number: '05',
+    category: 'editorial',
+    org: 'Extra Innings with Abdullah',
+    title: 'ANALYSIS SLIDES',
+    kind: 'Editorial, long copy at feed size',
+    note:
+      'The pages behind the squad cards, and the hardest layout problem on the whole page: roughly eighty words of argument that still have to be readable as a square in a feed. A flat colour panel keyed to the side takes the left two thirds and carries the whole block in tracked caps, a cut-out figure holds the right edge so the frame is not a wall of text, and the heading changes to mark which stage of the argument you are on. Three stages run in order across a post, XI, then bench, then verdict, so the panel colour is the only thing telling you which side you are still reading about.',
+    tags: ['Editorial', 'Long copy', 'Colour system'],
+    frames: [
+      { name: 'eia-analysis-xi-magenta', caption: 'XI analysis, magenta', w: 1080, h: 1080 },
+      { name: 'eia-analysis-xi-olive', caption: 'XI analysis, olive', w: 1080, h: 1080 },
+      { name: 'eia-analysis-subs-red', caption: 'Substitutes, red', w: 1080, h: 1080 },
+      { name: 'eia-analysis-review-olive', caption: 'Overall review', w: 1080, h: 1080 },
+    ],
+  },
+  {
+    id: 'ec-groups',
+    number: '06',
     category: 'identity',
     org: 'TEDxFASTIslamabad',
     title: 'DIRECTORATE GROUP CARDS',
@@ -210,7 +229,7 @@ export const designWorks = [
   },
   {
     id: 'ec-titles',
-    number: '06',
+    number: '07',
     category: 'identity',
     org: 'TEDxFASTIslamabad',
     title: 'TITLE AND SECTION CARDS',
@@ -226,7 +245,7 @@ export const designWorks = [
   },
   {
     id: 'certificate',
-    number: '07',
+    number: '08',
     category: 'identity',
     org: 'TEDxFASTIslamabad',
     title: 'CERTIFICATE OF RECOGNITION',
@@ -241,7 +260,7 @@ export const designWorks = [
   },
   {
     id: 'eia-heroes',
-    number: '08',
+    number: '09',
     category: 'editorial',
     org: 'Extra Innings with Abdullah',
     title: 'PLAYER GRAPHICS',
@@ -257,7 +276,7 @@ export const designWorks = [
   },
   {
     id: 'eia-features',
-    number: '09',
+    number: '10',
     category: 'editorial',
     org: 'Extra Innings with Abdullah',
     title: 'FEATURE POSTS',
@@ -274,7 +293,7 @@ export const designWorks = [
   },
   {
     id: 'fcs-session',
-    number: '10',
+    number: '11',
     category: 'identity',
     org: 'FAST Computing Society',
     title: 'SESSION COVER',
@@ -288,7 +307,7 @@ export const designWorks = [
   },
   {
     id: 'committee-card',
-    number: '11',
+    number: '12',
     category: 'identity',
     org: 'TEDxFASTIslamabad',
     title: 'CORE TEAM CARD',
@@ -303,7 +322,7 @@ export const designWorks = [
   },
   {
     id: 'eia-teams',
-    number: '12',
+    number: '13',
     category: 'editorial',
     org: 'Extra Innings with Abdullah',
     title: 'BEST POSSIBLE XI, BY NATION',
@@ -319,7 +338,7 @@ export const designWorks = [
   },
   {
     id: 'eia-review',
-    number: '13',
+    number: '14',
     category: 'editorial',
     org: 'Extra Innings with Abdullah',
     title: 'YEAR IN REVIEW',
@@ -335,7 +354,7 @@ export const designWorks = [
   },
   {
     id: 'ec-iteration',
-    number: '14',
+    number: '15',
     category: 'process',
     org: 'TEDxFASTIslamabad',
     title: 'TWO APPROACHES TO THE SAME CARD',
@@ -352,7 +371,7 @@ export const designWorks = [
   },
   {
     id: 'eia-fixtures',
-    number: '15',
+    number: '16',
     category: 'editorial',
     org: 'Extra Innings with Abdullah',
     title: 'FIXTURE AND SQUAD CARDS',
@@ -367,7 +386,7 @@ export const designWorks = [
   },
   {
     id: 'eia-earlier',
-    number: '16',
+    number: '17',
     category: 'editorial',
     org: 'Extra Innings with Abdullah',
     title: 'EARLIER WORK',
