@@ -57,8 +57,6 @@
  *              had to do with the person. If you add a sixth game and
  *              cannot write this line, the mechanic is wrong, not the
  *              copy.
- *   modules    OPTIONAL, liveGraph only: [{ label, role }] for the five
- *              module boxes. Mechanical labels, never a credential.
  *   beats      revealed IN ORDER, one per success event. The scene
  *              decides what a "success" is; it emits
  *              ctx.emit('reveal', { index }) and this array supplies the
@@ -154,28 +152,13 @@ export const games = [
   },
   {
     episodeId: 'projects',
-    kind: 'liveGraph',
-    title: 'ONE LIVE GRAPH',
-    verb: 'Wiring',
-    brief: 'Five modules, one shared graph. Connect each one to it.',
-    controls: { pointer: 'Drag from a module to the graph', key: 'Arrows to pick, Space to connect' },
-    goal: 'Wire all five. Then change one thing and watch the rest re-adapt.',
-    why: 'Each module is a real component of CityMind, and the graph is the one shared structure they all read from. Wiring them is how the project was actually assembled.',
-    /**
-     * Mechanical labels for liveGraph.js's five module boxes. `role` is
-     * what that module DOES inside the system, not a claim about the
-     * person -- each line traces to a beat below (the CSP solver that
-     * places the city, the A* router, the risk-to-road-weight loop). It
-     * lives here rather than in the scene because a scene file may not
-     * contain copy.
-     */
-    modules: [
-      { label: 'LAYOUT', role: 'Places the city' },
-      { label: 'ROUTING', role: 'Plans the routes' },
-      { label: 'RISK', role: 'Scores the danger' },
-      { label: 'DEMAND', role: 'Weights the roads' },
-      { label: 'FEEDBACK', role: 'Closes the loop' },
-    ],
+    kind: 'runIt',
+    title: 'RUN IT',
+    verb: 'Programming',
+    brief: 'Write a short program, press RUN, and watch it execute.',
+    controls: { pointer: 'Tap a slot to change it, tap RUN', key: 'Arrows to set, Space to run' },
+    goal: 'Get the runner to the flag on each of eight courses. A bad instruction fails in place and tells you which one it was.',
+    why: 'Every level is a project: you write it, it breaks somewhere specific, you fix the one line that was wrong and run it again. That loop is what building these actually was.',
     beats: [
       { label: 'CITYMIND', text: 'Five AI algorithms sharing a single live city graph.' },
       { label: 'LAYOUT', text: 'A constraint-satisfaction solver places the city.' },

@@ -91,6 +91,8 @@ export default function Floor() {
         navigate('/chapters');
       } else if (name === 'desk') {
         navigate('/plain');
+      } else if (name === 'design') {
+        navigate('/design');
       } else if (name === 'locked') {
         showToast('doorLocked');
       }
@@ -112,6 +114,7 @@ export default function Floor() {
     if (!prompt) return 'Walk left or right to find a door.';
     if (prompt.kind === 'stairs') return 'The stairs. The Episode Explorer, every episode unlocked.';
     if (prompt.kind === 'desk') return 'The desk. The plain resume, every fact on one page.';
+    if (prompt.kind === 'pinboard') return 'The pinboard. The design work, ninety pieces.';
     if (!prompt.unlocked) return `Episode ${prompt.number}, ${prompt.title}. Locked: clear the door before it, or take the stairs.`;
     return `Episode ${prompt.number}, ${prompt.title}. ${prompt.cleared ? 'Cleared. Enter to replay.' : 'Enter to play.'}`;
   })();
@@ -125,7 +128,7 @@ export default function Floor() {
         >
           ◂ Title
         </Link>
-        <p className="hidden font-display text-xs uppercase tracking-[0.24em] text-bone/40 sm:block">
+        <p className="hidden font-body text-[11px] uppercase tracking-[0.18em] text-bone/40 sm:block">
           The floor · {cleared.length} of {episodes.length} doors open
         </p>
         <div className="flex items-center gap-3 sm:gap-4">
@@ -223,7 +226,7 @@ function PadButton({ children, onPress, label, wide = false }) {
       onPointerLeave={stop}
       onPointerCancel={stop}
       onClick={(event) => event.preventDefault()}
-      className={`select-none border-[3px] border-bone/30 px-4 py-2 font-display text-base uppercase text-bone/85 transition-colors duration-[120ms] hover:border-bone/60 hover:text-bone ${
+      className={`select-none border border-bone/30 px-4 py-2.5 font-body text-sm font-semibold uppercase tracking-[0.1em] text-bone/85 transition-colors duration-[120ms] hover:border-bone/60 hover:text-bone ${
         wide ? 'px-6' : ''
       }`}
     >

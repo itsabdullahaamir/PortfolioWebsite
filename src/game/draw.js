@@ -75,7 +75,7 @@ export function fillRough(g, x, y, w, h, color, seed = 1, depth = 4) {
   g.fill();
 }
 
-export function strokeRough(g, x, y, w, h, color, seed = 1, depth = 4, width = 2) {
+export function strokeRough(g, x, y, w, h, color, seed = 1, depth = 4, width = 1.25) {
   roughRect(g, x, y, w, h, seed, depth);
   g.strokeStyle = color;
   g.lineWidth = width;
@@ -115,9 +115,9 @@ export function litWindow(g, x, y, w, h, palette, intensity = 1) {
   g.fillRect(x, y, w, h);
 
   // Mullions, so a big pane reads as a window and not as a blank slab.
-  if (w > 26 && h > 26) {
+  if (w > 18 && h > 18) {
     g.strokeStyle = rgba(palette.ink, 0.55);
-    g.lineWidth = 2;
+    g.lineWidth = 1;
     g.beginPath();
     g.moveTo(x + w / 2, y);
     g.lineTo(x + w / 2, y + h);
@@ -152,7 +152,7 @@ export function withRim(g, paint, dx, dy, rimColor, inkColor) {
  * `dir` is 'down' | 'up' | 'left' | 'right' and says which way the dots
  * thin out.
  */
-export function halftone(g, x, y, w, h, color, dir = 'down', spacing = 9, seed = 7) {
+export function halftone(g, x, y, w, h, color, dir = 'down', spacing = 6, seed = 7) {
   const rand = rng(seed);
   g.fillStyle = color;
   for (let py = y; py < y + h; py += spacing) {
@@ -163,7 +163,7 @@ export function halftone(g, x, y, w, h, color, dir = 'down', spacing = 9, seed =
       else if (dir === 'right') t = 1 - (px - x) / w;
       else t = (px - x) / w;
       if (rand() > t * t) continue;
-      const r = 0.6 + t * 1.9;
+      const r = 0.35 + t * 0.95;
       g.beginPath();
       g.arc(px, py, r, 0, Math.PI * 2);
       g.fill();
@@ -338,7 +338,7 @@ export function rgba(hex, a) {
  * The vignette every scene closes with, so the frame edges fall into ink
  * and the lit middle carries the eye. Call last, before any HUD.
  */
-export function vignette(g, w, h, palette, strength = 0.55) {
+export function vignette(g, w, h, palette, strength = 0.38) {
   const grad = g.createRadialGradient(w / 2, h / 2, h * 0.22, w / 2, h / 2, h * 0.92);
   grad.addColorStop(0, rgba(palette.ink, 0));
   grad.addColorStop(1, rgba(palette.ink, strength));
@@ -353,7 +353,7 @@ export function vignette(g, w, h, palette, strength = 0.55) {
  * and repeated -- regenerating noise per frame is a guaranteed stall.
  */
 let grainTile = null;
-export function grain(g, w, h, amount = 0.05, reducedMotion = false, frame = 0) {
+export function grain(g, w, h, amount = 0.03, reducedMotion = false, frame = 0) {
   if (!grainTile) {
     const size = 96;
     const canvas = document.createElement('canvas');

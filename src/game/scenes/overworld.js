@@ -10,6 +10,7 @@ import {
   lerp,
   rgba,
   rng,
+  strokeRough,
   text,
   vignette,
   withRim,
@@ -66,6 +67,19 @@ const STAIRS_X = 700;
  */
 const DESK_X = 246;
 /*
+ * The pinboard: the design work's place in the room. It sits on the back
+ * wall between the desk (246) and the stairwell (700), far enough from
+ * both that REACH (115) can never focus two spots at once -- 224 units
+ * from the desk and 230 from the stairs.
+ *
+ * Why it exists at all: `/design` is a link the site owner sends people,
+ * and before this it was reachable from the menu and the header but had
+ * no place in the world. The desk already set the precedent -- the plain
+ * resume is a thing in the room rather than only a link over it -- and
+ * a board of pinned work is what that argument looks like for graphics.
+ */
+const PINBOARD_X = 470;
+/*
  * How close you must be for a door's prompt to appear.
  *
  * Sized against WALK_SPEED, not picked by eye: at 210 units/second a
@@ -97,6 +111,7 @@ export function createOverworld(config) {
   // caption bolted over it.
   const spots = [
     { kind: 'desk', x: DESK_X, label: 'THE DESK' },
+    { kind: 'pinboard', x: PINBOARD_X, label: 'THE PINBOARD', hint: 'Ninety pieces of design work' },
     { kind: 'stairs', x: STAIRS_X, label: 'THE STAIRS', hint: 'Episode Explorer: every episode, unlocked' },
     ...doors.map((door, i) => ({
       kind: 'door',
@@ -161,6 +176,7 @@ export function createOverworld(config) {
           entering = null;
           if (spot.kind === 'stairs') ctx.emit('stairs', {});
           else if (spot.kind === 'desk') ctx.emit('desk', {});
+          else if (spot.kind === 'pinboard') ctx.emit('design', {});
           else ctx.emit('enter', { episodeId: spot.door.episodeId });
         }
         return;
@@ -200,6 +216,8 @@ export function createOverworld(config) {
             onPrompt({ kind: 'stairs', title: 'The stairs', hint: focused.hint });
           } else if (focused.kind === 'desk') {
             onPrompt({ kind: 'desk', title: 'The desk' });
+          } else if (focused.kind === 'pinboard') {
+            onPrompt({ kind: 'pinboard', title: 'The pinboard', hint: focused.hint });
           } else {
             onPrompt({
               kind: 'door',
@@ -218,7 +236,12 @@ export function createOverworld(config) {
       // Enter.
       const wantsEnter = input.pressed('up') || input.pressed('action');
       if (wantsEnter && focused) {
-        if (focused.kind === 'stairs' || focused.kind === 'desk' || focused.door.unlocked) {
+        if (
+          focused.kind === 'stairs' ||
+          focused.kind === 'desk' ||
+          focused.kind === 'pinboard' ||
+          focused.door.unlocked
+        ) {
           ctx.sound('select');
           entering = { spot: focused, t: 0 };
         } else {
@@ -243,6 +266,7 @@ export function createOverworld(config) {
       drawSkyline(g, ctx, skyline, shift);
       drawBackWall(g, ctx, shift);
       drawStudy(g, ctx, shift, focused?.kind === 'desk');
+      drawPinboard(g, ctx, shift, focused?.kind === 'pinboard');
       drawStairs(g, ctx, shift);
       for (const spot of spots) {
         if (spot.kind === 'door') drawDoor(g, ctx, spot, shift);
@@ -403,7 +427,7 @@ function drawBackWall(g, ctx, shift) {
     const wx = windowX(i) + shift;
     if (wx + 150 < 0 || wx > W) continue;
     g.strokeStyle = palette.ink;
-    g.lineWidth = 5;
+    g.lineWidth = 3;
     g.strokeRect(wx, wallTop + 46, 150, 150);
     g.beginPath();
     g.moveTo(wx + 75, wallTop + 46);
@@ -498,6 +522,64 @@ function drawStudy(g, ctx, shift, focused = false) {
   });
 }
 
+/**
+ * The pinboard on the back wall: a cork board with pinned sheets, which
+ * is what the design work looks like as an object in a room.
+ *
+ * Deliberately NOT an icon and NOT a thumbnail of real artwork. An icon
+ * set is on this project's do-not-add list (root CLAUDE.md phase 4), and
+ * sampling real posters into a 960x540 canvas at this scale would render
+ * them as unreadable confetti. Pinned rectangles at three tones read as
+ * "work on a wall" at any size, which is all this has to do.
+ *
+ * `focused` brightens the sheets and the pins rather than adding a
+ * marker, matching how drawStudy() handles the desk.
+ */
+function drawPinboard(g, ctx, shift, focused = false) {
+  const { palette } = ctx;
+  const x = PINBOARD_X + shift;
+  if (x > ctx.W + 240 || x < -240) return;
+
+  const w = 184;
+  const h = 128;
+  const top = 206;
+  const left = x - w / 2;
+  const lift = focused ? 1 : 0;
+
+  // Board.
+  fillRough(g, left, top, w, h, rgba(palette.bone, 0.07 + lift * 0.05), 311, 3);
+  strokeRough(g, left, top, w, h, rgba(palette.bone, 0.2 + lift * 0.26), 311, 3, 1.25);
+
+  // Pinned sheets. Seeded so the board looks the same every reload.
+  const rand = rng(4120);
+  for (let i = 0; i < 7; i += 1) {
+    const sw = 34 + Math.floor(rand() * 16);
+    const sh = 26 + Math.floor(rand() * 18);
+    const sx = left + 12 + (i % 4) * 42 + (rand() - 0.5) * 6;
+    const sy = top + 14 + Math.floor(i / 4) * 54 + (rand() - 0.5) * 6;
+    if (sx + sw > left + w - 8 || sy + sh > top + h - 8) continue;
+    const tone = 0.14 + (i % 3) * 0.07 + lift * 0.14;
+    fillRough(g, sx, sy, sw, sh, rgba(palette.bone, tone), 500 + i * 9, 2);
+    // One sheet in signal: the board gets the screen's accent only when
+    // you are standing at it, so it never competes with a cleared door.
+    if (i === 2 && focused) {
+      fillRough(g, sx, sy, sw, 5, rgba(palette.signal, 0.75), 900, 1.5);
+    }
+    g.fillStyle = rgba(palette.bone, 0.32 + lift * 0.3);
+    g.beginPath();
+    g.arc(sx + sw / 2, sy + 3, 1.6, 0, Math.PI * 2);
+    g.fill();
+  }
+
+  text(g, 'PINBOARD', x, top - 14, {
+    size: 12,
+    face: DISPLAY,
+    align: 'center',
+    color: rgba(palette.bone, focused ? 0.7 : 0.3),
+    tracking: 2,
+  });
+}
+
 function drawStairs(g, ctx, shift) {
   const { palette } = ctx;
   const x = STAIRS_X + shift;
@@ -512,7 +594,7 @@ function drawStairs(g, ctx, shift) {
     g.fillRect(x - 54 + i * 9, FLOOR_Y - 22 - i * 22, 108 - i * 18, 8);
   }
   g.strokeStyle = rgba(palette.bone, 0.3);
-  g.lineWidth = 3;
+  g.lineWidth = 1.75;
   g.strokeRect(x - 62, FLOOR_Y - 168, 124, 168);
 
   text(g, 'STAIRS', x, FLOOR_Y - 184, {
@@ -547,7 +629,7 @@ function drawDoor(g, ctx, spot, shift) {
   g.fillRect(left - 10, top - 42, DOOR_W + 20, DOOR_H + 42);
   fillRough(g, left, top, DOOR_W, DOOR_H, door.unlocked ? palette.shadow : palette.ink, spot.index * 9 + 5, 3);
   g.strokeStyle = door.unlocked ? rgba(palette.bone, 0.42) : rgba(palette.bone, 0.14);
-  g.lineWidth = 3;
+  g.lineWidth = 1.75;
   g.strokeRect(left, top, DOOR_W, DOOR_H);
 
   // Handle.
@@ -687,13 +769,22 @@ function drawPromptFor(g, ctx, spot, shift) {
       ? 'Episode Explorer'
       : spot.kind === 'desk'
         ? 'The plain resume'
+        : spot.kind === 'pinboard'
+          ? 'The design work'
         : locked
           ? `Clear episode ${spot.door.number - 1} first`
           : spot.door.cleared
             ? 'Replay'
             : 'Enter';
 
-  const label = spot.kind === 'stairs' ? 'THE STAIRS' : spot.kind === 'desk' ? 'THE DESK' : spot.door.title;
+  const label =
+    spot.kind === 'stairs'
+      ? 'THE STAIRS'
+      : spot.kind === 'desk'
+        ? 'THE DESK'
+        : spot.kind === 'pinboard'
+          ? 'THE PINBOARD'
+          : spot.door.title;
 
   g.save();
   g.font = `400 15px ${DISPLAY}`;
@@ -702,7 +793,7 @@ function drawPromptFor(g, ctx, spot, shift) {
 
   fillRough(g, x - w / 2, y, w, 62, rgba(palette.ink, 0.94), 71, 3);
   g.strokeStyle = rgba(palette.bone, locked ? 0.24 : 0.5);
-  g.lineWidth = 2;
+  g.lineWidth = 1.25;
   g.strokeRect(x - w / 2, y, w, 62);
 
   text(g, label, x, y + 24, {

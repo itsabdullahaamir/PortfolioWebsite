@@ -87,9 +87,6 @@ export default function Play() {
       createScene(game.kind, {
         beats: game.beats,
         episode,
-        // Optional, liveGraph only. Mechanical box labels live in
-        // games.js because a scene file may not contain copy.
-        modules: game.modules,
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [game, episode, runKey],
@@ -206,7 +203,7 @@ export default function Play() {
 function BriefCard({ game, episode, onStart, cleared }) {
   return (
     <div className="flex min-h-screen items-center justify-center px-6 py-16">
-      <div className="w-full max-w-xl border-[3px] border-bone/30 bg-shadow/40 p-7 sm:p-10">
+      <div className="w-full max-w-xl border border-bone/30 bg-shadow/40 p-6 sm:p-8">
         <p className="font-body text-xs uppercase tracking-[0.28em] text-bone/50">
           Episode {episode.number} · {episode.title}
         </p>
@@ -242,7 +239,7 @@ function BriefCard({ game, episode, onStart, cleared }) {
           </p>
           <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1">
             {game.beats.map((beat, i) => (
-              <li key={beat.label} className="font-display text-[11px] uppercase tracking-[0.16em] text-bone/60">
+              <li key={beat.label} className="font-body text-[10px] font-semibold uppercase tracking-[0.12em] text-bone/60">
                 {beat.label}
                 {i < game.beats.length - 1 ? <span className="ml-3 text-bone/25">·</span> : null}
               </li>
@@ -254,7 +251,7 @@ function BriefCard({ game, episode, onStart, cleared }) {
           <button
             type="button"
             onClick={onStart}
-            className="border-[3px] border-signal bg-transparent px-6 py-3 font-display text-lg uppercase text-signal transition-transform duration-[120ms] ease-out hover:translate-x-1"
+            className="border-2 border-signal bg-transparent px-6 py-3 font-display text-base uppercase text-signal transition-transform duration-[120ms] ease-out hover:translate-x-1"
           >
             ▸ {cleared ? 'Play again' : 'Begin'}
           </button>
@@ -309,7 +306,7 @@ function RevealFlash({ beat }) {
       key={beat.label}
       className="pointer-events-none absolute inset-x-4 bottom-4 mx-auto max-w-lg border-l-[3px] border-signal bg-ink/92 px-4 py-3 sm:inset-x-8"
     >
-      <p className="font-display text-xs uppercase tracking-[0.2em] text-signal">{beat.label}</p>
+      <p className="font-body text-[11px] font-semibold uppercase tracking-[0.14em] text-signal">{beat.label}</p>
       <p className="mt-1 font-body text-sm leading-snug text-bone">{beat.text}</p>
     </div>
   );
@@ -324,7 +321,7 @@ function RevealFlash({ beat }) {
  */
 function RecordColumn({ game, episode, isRevealed, count, episodeId, onLeave }) {
   return (
-    <aside className="flex w-full shrink-0 flex-col border-t-[3px] border-bone/15 bg-shadow/25 p-5 lg:h-full lg:w-80 lg:border-l-[3px] lg:border-t-0">
+    <aside className="flex w-full shrink-0 flex-col border-t border-bone/15 bg-shadow/25 p-4 lg:h-full lg:w-80 lg:border-l lg:border-t-0">
       <p className="font-body text-[10px] uppercase tracking-[0.24em] text-bone/40">
         Episode {episode.number} · {episode.title}
       </p>
@@ -335,16 +332,16 @@ function RecordColumn({ game, episode, isRevealed, count, episodeId, onLeave }) 
         </span>
       </div>
 
-      <ol className="mt-4 min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
+      <ol className="mt-3 min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
         {game.beats.map((beat) => {
           const open = isRevealed(beat);
           return (
             <li
               key={beat.label}
-              className={`border-l-2 pl-3 ${open ? 'border-bone/25' : 'border-bone/10'}`}
+              className={`border-l pl-2.5 ${open ? 'border-bone/25' : 'border-bone/10'}`}
             >
               <p
-                className={`font-display text-[11px] uppercase tracking-[0.18em] ${
+                className={`font-body text-[10px] font-semibold uppercase tracking-[0.12em] ${
                   open ? 'text-bone/55' : 'text-bone/30'
                 }`}
               >
@@ -404,7 +401,7 @@ function ResultsCard({
   const missed = game.beats.length - count;
   return (
     <div className="absolute inset-0 z-30 flex items-start justify-center overflow-y-auto bg-ink/94 px-6 py-12">
-      <div className="my-auto w-full max-w-lg border-[3px] border-bone/30 bg-shadow/40 p-7 sm:p-9">
+      <div className="my-auto w-full max-w-lg border border-bone/30 bg-shadow/40 p-6 sm:p-7">
         <p className="font-body text-xs uppercase tracking-[0.28em] text-bone/50">
           {won ? 'Door open' : 'Run ended'} · {stat}
         </p>
@@ -426,7 +423,7 @@ function ResultsCard({
             const open = isRevealed(beat);
             return (
               <li key={beat.label} className={`border-l-2 pl-3 ${open ? 'border-bone/30' : 'border-bone/10'}`}>
-                <p className="font-display text-[11px] uppercase tracking-[0.18em] text-bone/55">
+                <p className="font-body text-[10px] font-semibold uppercase tracking-[0.12em] text-bone/55">
                   {beat.label}
                   {open ? null : <span className="ml-2 text-bone/30">· not reached</span>}
                 </p>
@@ -447,14 +444,14 @@ function ResultsCard({
         <div className="mt-7 flex flex-col gap-3">
           <Link
             to={`/chapters/${episode.id}`}
-            className="border-[3px] border-signal px-5 py-2.5 text-center font-display text-base uppercase text-signal transition-transform duration-[120ms] ease-out hover:translate-x-1"
+            className="border-2 border-signal px-5 py-2.5 text-center font-display text-sm uppercase text-signal transition-transform duration-[120ms] ease-out hover:translate-x-1"
           >
             ▸ Read the full episode
           </Link>
           <button
             type="button"
             onClick={onReplay}
-            className="border-[3px] border-bone/30 px-5 py-2.5 font-display text-base uppercase text-bone/85 transition-transform duration-[120ms] ease-out hover:translate-x-1"
+            className="border border-bone/30 px-5 py-2.5 font-display text-sm uppercase text-bone/85 transition-transform duration-[120ms] ease-out hover:translate-x-1"
           >
             ▸ Run it again
           </button>

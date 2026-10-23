@@ -2,7 +2,7 @@ import { createStack } from './stack.js';
 import { createHandsUp } from './handsUp.js';
 import { createEventDay } from './eventDay.js';
 import { createFortyEight } from './fortyEight.js';
-import { createLiveGraph } from './liveGraph.js';
+import { createRunIt } from './runIt.js';
 
 /**
  * Scene registry -- the join between a game's `kind` in
@@ -40,7 +40,7 @@ const FACTORIES = {
   handsUp: createHandsUp,
   eventDay: createEventDay,
   fortyEight: createFortyEight,
-  liveGraph: createLiveGraph,
+  runIt: createRunIt,
 };
 
 export function createScene(kind, config) {

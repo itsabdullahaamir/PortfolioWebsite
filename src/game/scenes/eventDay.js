@@ -528,7 +528,7 @@ function drawHall(g, ctx, geo, props) {
 
   // Truss and hangers -- the "still being set up" read, in two strokes.
   g.strokeStyle = rgba(palette.bone, 0.12);
-  g.lineWidth = 2;
+  g.lineWidth = 1.25;
   g.beginPath();
   g.moveTo(0, H * 0.155);
   g.lineTo(W, H * 0.155);
@@ -582,7 +582,7 @@ function drawColumn(g, ctx, geo, col, meter, opts) {
     // A single strike drawn corner-to-corner is the "struck-out" mark
     // itself -- unambiguous at this size, and cheaper than a hatch fill.
     g.strokeStyle = rgba(palette.bone, 0.3);
-    g.lineWidth = 3;
+    g.lineWidth = 2;
     g.beginPath();
     g.moveTo(x + 4, y + h - 4);
     g.lineTo(x + w - 4, y + 4);

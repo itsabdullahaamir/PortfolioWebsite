@@ -869,7 +869,7 @@ function drawFinishTowers(g, ctx, worldX, endHour, groundY, finale) {
   // the route, because the route exists.
   if (finale) {
     g.strokeStyle = rgba(palette.bone, 0.26);
-    g.lineWidth = 2;
+    g.lineWidth = 1.25;
     g.setLineDash([8, 12]);
     g.beginPath();
     g.moveTo(secondCx + secondW / 2, secondY);

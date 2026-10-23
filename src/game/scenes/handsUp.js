@@ -682,7 +682,7 @@ function drawSelection(g, ctx, seat) {
 
   g.save();
   g.strokeStyle = rgba(palette.signal, 0.55 + 0.35 * pulse);
-  g.lineWidth = 2;
+  g.lineWidth = 1.25;
   g.beginPath();
   for (const [sx, sy] of corners) {
     const cx = p.hx + sx * r;

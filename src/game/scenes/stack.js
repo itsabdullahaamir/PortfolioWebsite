@@ -240,7 +240,7 @@ export function createStack(config) {
         drawFloorBlock(g, ctx, moving, y, tower.length, 0, true);
         // Drop line, so the timing is readable rather than guessed.
         g.strokeStyle = rgba(palette.signal, 0.5);
-        g.lineWidth = 2;
+        g.lineWidth = 1.25;
         g.setLineDash([6, 8]);
         g.beginPath();
         g.moveTo(moving.x + moving.w / 2, y + BLOCK_H);
@@ -304,7 +304,7 @@ function drawFloorBlock(g, ctx, block, y, index, flash = 0, ghost = false) {
 
   // Edges.
   g.strokeStyle = rgba(palette.bone, ghost ? 0.3 : 0.35);
-  g.lineWidth = 2;
+  g.lineWidth = 1.25;
   g.strokeRect(block.x, y, block.w, BLOCK_H);
 
   if (flash > 0) {
