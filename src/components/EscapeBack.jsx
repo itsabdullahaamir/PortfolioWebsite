@@ -31,7 +31,14 @@ function parentOf(pathname) {
   // agrees with the "Leave the room" control inside Play.jsx. The floor
   // itself escapes to the title screen, same as /chapters.
   if (pathname.startsWith('/play/')) return '/floor';
-  if (pathname === '/chapters' || pathname === '/plain' || pathname === '/floor') return '/';
+  if (
+    pathname === '/chapters' ||
+    pathname === '/plain' ||
+    pathname === '/design' ||
+    pathname === '/floor'
+  ) {
+    return '/';
+  }
   return null;
 }
 

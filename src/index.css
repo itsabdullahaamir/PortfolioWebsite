@@ -283,7 +283,16 @@ html.route-moving *::after {
   effect to two screens (and a cleanup path for every way they can
   unmount, including a transition that unmounts them mid-animation).
   Scoped to .game-surface so it can never affect the document screens.
+
+  `.night-surface` is the same rule for a screen that is full-bleed dark
+  without being part of the game surface — currently only `/design`
+  (screens/DesignGallery.jsx). It is a second class rather than reusing
+  `.game-surface` there because that class also means "this is a game
+  screen" to anyone reading the markup, and the gallery is a reading
+  screen that happens to be dark. Any future dark screen should take
+  this one, not the game one.
 */
-html:has(.game-surface) {
+html:has(.game-surface),
+html:has(.night-surface) {
   background-color: var(--ink);
 }

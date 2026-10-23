@@ -140,6 +140,9 @@ const ROUTE_DEPTHS = [
   [/^\/chapters\/[^/]+/, 2],
   [/^\/chapters\/?$/, 1],
   [/^\/plain\/?$/, 1],
+  // /design is a reading surface one level in from the menu, same as
+  // /plain — the dolly should push in from the menu and pull back out.
+  [/^\/design\/?$/, 1],
   // The game surface mirrors the reading surface's depths: the walkable
   // floor sits one level in from the menu (like /chapters), and a room
   // on it sits one level further (like an episode). So walking into a

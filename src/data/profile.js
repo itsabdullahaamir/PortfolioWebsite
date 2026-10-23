@@ -195,11 +195,11 @@ export const profile = {
         'Promoted from Deputy Director of HR, a post held from July 2025 to June 2026. Manages HR queries across all Islamabad chapters and coordinates between them.',
     },
     {
-      role: 'Media & Marketing Executive',
+      role: 'Executive Member, Media & Marketing',
       org: 'TEDxFASTIslamabad',
       timespan: 'Dec 2025 to Feb 2026',
       detail:
-        'Ran social and print promotion on the media and marketing team (content calendar, speaker-announcement graphics, and day-of coverage) in the run-up to the event.',
+        'Ran social and print promotion on the media and marketing team (content calendar, speaker-announcement graphics, and day-of coverage) in the run-up to the event. Designed the recognition certificate, the organizing-committee card template and the team-announcement carousel; selected pieces are at /design on this site.',
     },
     {
       role: 'Discord Server Administrator, then Content Coordination Intern',

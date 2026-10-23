@@ -94,6 +94,12 @@ export default function MainMenu({ reducedMotion }) {
         }
       : null,
     { key: 'episodes', label: 'EPISODE EXPLORER', action: () => navigate('/chapters') },
+    // DESIGN WORK (/design) is the graphic-design surface, added on direct
+    // user request. It sits here rather than beside PLAIN RESUME at the
+    // top because two document entries above NEW GAME would bury the
+    // game surface entirely; it is still above OPTIONS, which is
+    // settings rather than a destination.
+    { key: 'design', label: 'DESIGN WORK', action: () => navigate('/design') },
     { key: 'options', label: 'OPTIONS', action: () => setOptionsOpen((open) => !open) },
   ].filter(Boolean);
 

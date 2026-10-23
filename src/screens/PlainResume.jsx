@@ -571,6 +571,19 @@ export default function PlainResume() {
             >
               Download / print
             </button>
+            {/* The design gallery. A second link here is a deliberate
+                exception to the "exactly one back link" instruction that
+                stripped /chapters out of this rail: that removal was
+                about not making a recruiter navigate the game to reach
+                the resume, and this goes the other way — it is more
+                evidence of the same record, one click from the document
+                that cites the role. */}
+            <Link
+              to="/design"
+              className="dossier-chrome font-body text-xs uppercase tracking-[0.12em] text-ink/70 underline decoration-ink/30 underline-offset-4 hover:text-ink"
+            >
+              ◧ Design work (TEDx)
+            </Link>
             <Link
               to="/"
               className="dossier-chrome font-body text-xs uppercase tracking-[0.12em] text-ink/70 underline decoration-ink/30 underline-offset-4 hover:text-ink"

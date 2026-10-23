@@ -382,6 +382,9 @@ export default function ChapterSelect() {
             <Link to="/plain" className={ACTION}>
               <span aria-hidden="true">▤</span> Plain resume
             </Link>
+            <Link to="/design" className={ACTION}>
+              <span aria-hidden="true">◧</span> Design work
+            </Link>
           </div>
         </div>
       </div>

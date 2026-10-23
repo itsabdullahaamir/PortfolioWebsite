@@ -13,6 +13,7 @@ import TitleScreen from './screens/TitleScreen.jsx';
 import ChapterSelect from './screens/ChapterSelect.jsx';
 import EpisodeView from './screens/EpisodeView.jsx';
 import PlainResume from './screens/PlainResume.jsx';
+import DesignGallery from './screens/DesignGallery.jsx';
 import Floor from './screens/Floor.jsx';
 import Play from './screens/Play.jsx';
 
@@ -109,6 +110,13 @@ export default function App() {
                   <Route path="/chapters" element={<ChapterSelect />} />
                   <Route path="/chapters/:id" element={<EpisodeView />} />
                   <Route path="/plain" element={<PlainResume />} />
+                  {/* The graphic-design surface. Not in spec section 7's
+                      route list; added on direct user request for a link
+                      that can be sent as proof of the TEDx role. Ungated
+                      and one level deep, exactly like /plain, so it sits
+                      beside the reading surfaces rather than inside the
+                      game. See screens/DesignGallery.jsx. */}
+                  <Route path="/design" element={<DesignGallery />} />
                   {/* The game surface. /floor is the walkable overworld
                       behind NEW GAME; /play/:id is one room on it. Both
                       sit inside the same AnimatedOutlet layout as every
