@@ -134,9 +134,9 @@ export const designWorks = [
     tags: ['Identity system', 'Instagram', 'Series template'],
     frames: [
       { name: 'ec-president-sitting', caption: 'Seated, bookcase', w: 960, h: 1200 },
-      { name: 'ec-haseeb', caption: 'Standing, lamplit', w: 960, h: 1200 },
+      { name: 'ec-haseeb', caption: 'Seated, lamplit', w: 960, h: 1200 },
       { name: 'ec-fazeelat', caption: 'Seated, library', w: 960, h: 1200 },
-      { name: 'ec-nawal', caption: 'Standing, warm ground', w: 960, h: 1200 },
+      { name: 'ec-zarlish', caption: 'Standing, colour accent', w: 960, h: 1200 },
       { name: 'ec-saad', caption: 'Seated, armchair', w: 960, h: 1200 },
       { name: 'ec-mentor-1', caption: 'Mentor card', w: 960, h: 1200 },
     ],
@@ -149,14 +149,14 @@ export const designWorks = [
     title: 'SPEAKER CARDS',
     kind: 'Announcement system, light ground',
     note:
-      'The light half of the same identity. A speaker sits on paper white rather than studio black, with an oversized red X anchored behind the figure and a faint line pattern filling the ground. The name splits across two weights so the surname lands first at thumbnail size, and the credit line underneath takes anything from one role to four without the lockup moving. Five shown, chosen to span that range: one of these carries a four-line credit and one carries two words.',
+      'The light half of the same identity. A speaker sits on paper white rather than studio black, with an oversized red X anchored behind the figure and a faint line pattern filling the ground. The name splits across two weights so the surname lands first at thumbnail size, and the credit line underneath takes anything from one line to three without the lockup moving. Five shown, chosen to span that range and the poses it had to hold: one carries three dense lines of titles, one carries three words, and one was shot at a lectern rather than against a wall.',
     tags: ['Identity system', 'Instagram', 'Typography'],
     frames: [
-      { name: 'spk-hasan', caption: 'Two-line credit', w: 600, h: 1200 },
-      { name: 'spk-omar-baig', caption: 'Four-line credit', w: 600, h: 1200 },
+      { name: 'spk-hasan', caption: 'Three-line credit', w: 600, h: 1200 },
+      { name: 'spk-omar-baig', caption: 'Longest credit', w: 600, h: 1200 },
       { name: 'spk-aftab', caption: 'Lectern crop', w: 600, h: 1200 },
       { name: 'spk-murtaza', caption: 'Casual portrait', w: 600, h: 1200 },
-      { name: 'spk-hadia', caption: 'Short credit', w: 600, h: 1200 },
+      { name: 'spk-hadia', caption: 'One-line credit', w: 600, h: 1200 },
     ],
   },
   {
@@ -167,13 +167,12 @@ export const designWorks = [
     title: 'THE LEGACY OF ASIA CUP',
     kind: 'Editorial series',
     note:
-      'A retrospective run where each frame carries one match. The archive photograph is dropped into a white border so it reads as something pulled out of a box rather than posted fresh, the series title stays locked at the top of every frame so the run is recognisable mid-scroll, and the only thing that moves is the pull quote naming what that particular match was. The last two frames are the pages behind those covers, where the same post has to carry a hundred words: the photograph shrinks, a torn white card takes the top half, and the arrow motif from the cover becomes the margin rule that keeps the block from floating.',
+      'A retrospective run where each frame carries one match. The archive photograph is dropped into a white border so it reads as something pulled out of a box rather than posted fresh, the series title stays locked at the top of every frame so the run is recognisable mid-scroll, and only two things move: the pull quote naming what that match was, and the colour of the band under the photograph. The last two frames are the pages behind those covers, where the same post has to carry a hundred words: the photograph shrinks, a torn white card takes the top half, and the arrow motif from the cover becomes the margin rule that keeps the block from floating.',
     tags: ['Editorial', 'Series template', 'Long copy'],
     frames: [
       { name: 'eia-asiacup-1', caption: 'The showdown', w: 1080, h: 1080 },
       { name: 'eia-asiacup-2', caption: 'Completely outclassed', w: 1080, h: 1080 },
-      { name: 'eia-asiacup-3', caption: 'The all-round masterclass', w: 1080, h: 1080 },
-      { name: 'eia-asiacup-5', caption: 'The home derby', w: 1080, h: 1080 },
+      { name: 'eia-asiacup-derby', caption: 'The home derby, green band', w: 1080, h: 1080 },
       { name: 'eia-asiacup-page-1', caption: 'Inner page, opening', w: 1080, h: 1080 },
       { name: 'eia-asiacup-page-2', caption: 'Inner page, closing', w: 1080, h: 1080 },
     ],
@@ -191,7 +190,8 @@ export const designWorks = [
     frames: [
       { name: 'eia-xi-1', caption: 'Purple ground', w: 1080, h: 1080 },
       { name: 'eia-xi-2', caption: 'Yellow ground', w: 1080, h: 1080 },
-      { name: 'eia-xi-3', caption: 'Green ground', w: 1080, h: 1080 },
+      { name: 'eia-xi-3', caption: 'Navy ground', w: 1080, h: 1080 },
+      { name: 'eia-xi-lime', caption: 'Lime ground', w: 1080, h: 1080 },
     ],
   },
   {
@@ -223,8 +223,8 @@ export const designWorks = [
     tags: ['Group portrait', 'Instagram', 'Series template'],
     frames: [
       { name: 'ec-group-media', caption: 'Three figures', w: 960, h: 1200 },
-      { name: 'ec-group-ops', caption: 'Four figures', w: 960, h: 1200 },
-      { name: 'ec-group-security', caption: 'Two figures', w: 960, h: 1200 },
+      { name: 'ec-group-ops', caption: 'Two figures', w: 960, h: 1200 },
+      { name: 'ec-group-security', caption: 'One figure', w: 960, h: 1200 },
     ],
   },
   {
@@ -238,9 +238,9 @@ export const designWorks = [
       'The frames that open a run of member cards and tell a scrolling feed which part of the council it is looking at. Same ground and same lockup as the cards they introduce, but the portrait drops out and the type carries the whole frame, so a section break reads as a pause rather than as another person.',
     tags: ['Typography', 'Instagram', 'Series template'],
     frames: [
-      { name: 'ec-title-council', caption: 'Long three-line title', w: 960, h: 1200 },
-      { name: 'ec-title-president', caption: 'Single word', w: 960, h: 1200 },
-      { name: 'ec-title-mentors', caption: 'Section break', w: 960, h: 1200 },
+      { name: 'ec-title-council', caption: 'Three lines, red ground', w: 960, h: 1200 },
+      { name: 'ec-title-directorate', caption: 'Two lines, over the room', w: 960, h: 1200 },
+      { name: 'ec-title-president', caption: 'One word, dark ground', w: 960, h: 1200 },
     ],
   },
   {
@@ -285,13 +285,13 @@ export const designWorks = [
     title: 'FEATURE POSTS',
     kind: 'One-offs',
     note:
-      'The posts that belong to no series, which is what makes them the range. A recommendation post built out of torn paper and a halftone crop, an award card built as a tilted frame inside a frame, a question post where the type IS the artwork, and a list post that had to stay readable at the bottom of a feed. Each one sets its own rules and then keeps them.',
+      'The posts that belong to no series, which is what makes them the range. A recommendation post built out of torn paper and a halftone crop, an award card built as a tilted frame inside a frame, a question post where the type IS the artwork, and a tour squad where fourteen names had to sit beside a cut-out without crowding it. Each one sets its own rules and then keeps them.',
     tags: ['Editorial', 'Layout', 'Typography'],
     frames: [
       { name: 'eia-the-test', caption: 'Watch recommendation', w: 640, h: 640 },
       { name: 'eia-poty-2023', caption: 'Player of the year', w: 1080, h: 1080 },
       { name: 'eia-worldcup-who', caption: 'Question post', w: 1080, h: 1080 },
-      { name: 'eia-flop11', caption: 'List post', w: 1080, h: 1080 },
+      { name: 'eia-tour-nz', caption: 'Tour squad', w: 1200, h: 1200 },
     ],
   },
   {
@@ -335,8 +335,8 @@ export const designWorks = [
     tags: ['Editorial', 'Information design', 'Colour system'],
     frames: [
       { name: 'eia-team-pak', caption: 'Green ground', w: 1080, h: 1080 },
-      { name: 'eia-team-world-odi', caption: 'Blue ground, no flag', w: 1080, h: 1080 },
-      { name: 'eia-team-aus', caption: 'Gold ground', w: 1080, h: 1080 },
+      { name: 'eia-team-nz', caption: 'Charcoal ground', w: 1080, h: 1080 },
+      { name: 'eia-team-wi', caption: 'Coral ground', w: 1080, h: 1080 },
     ],
   },
   {
@@ -347,7 +347,7 @@ export const designWorks = [
     title: 'YEAR IN REVIEW',
     kind: 'Editorial set, three frames',
     note:
-      'A set that had to look like one thing across three separate posts. The ground, the brushed banner behind the heading and the position of the credit line are identical in all three; only the heading changes, and it changes weight rather than size, so the set reads as chapters of one review instead of three separate posts that happen to share a colour. All three are here because the set is the point.',
+      'A set that had to look like one thing across three separate posts. The first two hold it exactly: same dark ground, same brushed banner behind the heading, same credit line in the same corner, and only the wording changes. The third breaks it, swapping the dark ground for pale blue and the white heading for gold. All three are here because the drift is the more useful thing to look at: a set is only a set for as long as somebody keeps rebuilding it the same way.',
     tags: ['Editorial', 'Set design', 'Typography'],
     frames: [
       { name: 'eia-review-games', caption: 'Best games of the year', w: 1080, h: 1080 },
@@ -363,11 +363,11 @@ export const designWorks = [
     title: 'TWO APPROACHES TO THE SAME CARD',
     kind: 'Process',
     note:
-      'The council card was drawn twice, and the two are here side by side because the difference between them is the actual design decision. This approach sets the role oversized in a condensed italic and masks the portrait into it: strong as a single post, and hard as a system, because a longer role title forces the type down and every new photograph is a fresh cut rather than a drop-in. The approach at the top of this page gives the type its own strip along the bottom and lets the keyline do the holding, which costs the drama and buys a card anyone can fill in. The last two frames are the same artwork tested against a textile ground and a flat one.',
+      'The council card went through two approaches before the one at the top of this page, and the difference between them is the actual design decision. The first two frames keep the room and drop the name in distressed red caps across the bottom of the figure: handsome, and fragile, because the type sits on whatever happens to be behind it and a busy background eats it. The last two go the other way and set the ROLE oversized in a condensed italic with the portrait masked into it, which is strong as a single post and hard as a system, since a longer role title pushes the type down and every new photograph is a fresh cut rather than a drop-in. Those two are the same artwork tested against a textile ground and a flat one. What shipped at the top of this page gives the type its own strip along the bottom and lets a keyline do the holding, which costs the drama and buys a card anyone can fill in.',
     tags: ['Iteration', 'Type masking', 'System design'],
     frames: [
-      { name: 'ec-old-president', caption: 'Masked type, president', w: 960, h: 1200 },
-      { name: 'ec-old-member', caption: 'Masked type, director', w: 960, h: 1200 },
+      { name: 'ec-old-president', caption: 'First pass, director', w: 960, h: 1200 },
+      { name: 'ec-old-member', caption: 'First pass, president', w: 960, h: 1200 },
       { name: 'team-director-textile', caption: 'Textile ground', w: 960, h: 1200 },
       { name: 'team-director-flat', caption: 'Flat ground', w: 960, h: 1200 },
     ],
@@ -384,7 +384,7 @@ export const designWorks = [
     tags: ['Information design', 'Layout', 'Utility'],
     frames: [
       { name: 'eia-tour-nz-test', caption: 'Two-venue fixture card', w: 1080, h: 1080 },
-      { name: 'eia-t20wc-groupa', caption: 'Group preview', w: 1080, h: 1080 },
+      { name: 'eia-squad-asiangames', caption: 'Squad announcement', w: 675, h: 675 },
     ],
   },
   {
