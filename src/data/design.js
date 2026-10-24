@@ -93,7 +93,7 @@ export const designProfile = {
 
   // The 10-second band, same idea as profile.js's highlights[].
   highlights: [
-    { value: '57', label: 'Pieces shown' },
+    { value: '60', label: 'Pieces shown' },
     { value: '17', label: 'Series and systems' },
     { value: '3', label: 'Organisations' },
   ],
@@ -266,12 +266,15 @@ export const designWorks = [
     title: 'PLAYER GRAPHICS',
     kind: 'Hero posts',
     note:
-      'Single-figure posts where the whole job is the cut-out and the ground behind it. No lists, no stats panel, nothing to read except a name: the figure is masked out of a press photograph, the type is set oversized and then partly hidden behind the body so the two occupy the same space, and the background is built from flat shapes and grain rather than from another photograph.',
+      'Single-figure posts where the whole job is the cut-out and the ground behind it. Nothing to read except a name, so the type has to do the work: set oversized and then interlocked with the body, so the figure passes in front of some letters and behind others and the two share one space instead of sitting in layers. The grounds are built rather than borrowed, from torn edges, brush marks, grain and flat colour, never from a second photograph. The exceptions prove the rule: one frame turns a numeral into a window with a stadium inside it, and another drops the type almost out entirely and lets a ladder of bowling figures carry the frame instead.',
     tags: ['Photo treatment', 'Type masking', 'Composition'],
     frames: [
-      { name: 'eia-hero-shaheen', caption: 'Red ground', w: 960, h: 1200 },
-      { name: 'eia-hero-babar', caption: 'Numeral as artwork', w: 997, h: 1200 },
-      { name: 'eia-wtc-review', caption: 'Cycle review', w: 960, h: 1200 },
+      { name: 'eia-hero-fire', caption: 'Repeated type, dark ground', w: 960, h: 1200 },
+      { name: 'eia-hero-shaheen', caption: 'Torn red, two figures', w: 960, h: 1200 },
+      { name: 'eia-hero-rise', caption: 'Outlined type, interlocked', w: 960, h: 1200 },
+      { name: 'eia-hero-naseem', caption: 'Portrait and a figures ladder', w: 960, h: 1200 },
+      { name: 'eia-hero-babar', caption: 'Numeral as a window', w: 997, h: 1200 },
+      { name: 'eia-hero-sarfaraz', caption: 'Brushed yellow, stencil caps', w: 960, h: 1200 },
     ],
   },
   {
