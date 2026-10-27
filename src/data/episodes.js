@@ -89,7 +89,7 @@ export const episodes = [
       {
         header: 'RANK ONE OF 313',
         timestamp: '2024 to present',
-        body: 'Started BS Computer Science at FAST-NUCES and finished the first semester at the top of a 313-person cohort. Three top-of-semester finishes followed: two gold medals, one silver, and a perfect 4.00 in Fall 2025. Cumulative CGPA sits at 3.96 across 73 credit hours, now in the fifth semester.',
+        body: 'Started BS Computer Science at FAST-NUCES and finished the first semester at the top of a 313-person cohort. Four top-of-semester finishes followed: two gold medals, two silvers, and a perfect 4.00 in Fall 2025. Cumulative CGPA sits at 3.96 across 73 credit hours, now in the fifth semester.',
         tags: ['FAST-NUCES', 'CGPA 3.96', 'Rank 1 of 313'],
         link: null,
       },
@@ -172,14 +172,19 @@ export const episodes = [
       {
         header: 'EVENT HEAD, NASCON',
         // The event ran on 18 October 2026, so this panel is no longer
-        // written in the future tense. The C++ FaceOff round, which an
-        // earlier pass removed as an unverified claim, is restored: the
-        // live LinkedIn record shows it as a completed CS Event Head post
-        // from February to July 2026, which is the evidence that pass
-        // was missing. The scale figures come from the organiser's own
-        // post-event report, not from an estimate.
+        // written in the future tense. The scale figures come from the
+        // organiser's own post-event report, not from an estimate.
+        //
+        // C++ FaceOff and Speed Programming are ONE role, not two events
+        // delivered. He was appointed Head of C++ FaceOff in February and
+        // was MOVED to Speed Programming, the larger event, in July when
+        // NaSCon was delayed. An earlier pass removed FaceOff entirely as
+        // unverified, and the pass that restored it then over-corrected
+        // into "Ran C++ FaceOff for the same event earlier that year",
+        // which claims a second delivered event that never happened.
+        // Do not reintroduce any wording that implies he ran both.
         timestamp: '2026',
-        body: "CS Event Head for Speed Programming at NaSCon, Pakistan's largest student-run computing competition: 99 teams, 270 participants, and a 150,000 rupee prize pool, run with a volunteer panel through a network failure on the day. Ran C++ FaceOff for the same event earlier that year. Alongside it, media and marketing for TEDxFASTIslamabad, and HR Director for Isaar.",
+        body: "CS Event Head for Speed Programming at NaSCon, Pakistan's largest student-run computing competition: 99 teams, 270 participants, and a 150,000 rupee prize pool, run with a volunteer panel through a network failure on the day. Moved there from the smaller C++ FaceOff when NaSCon was delayed. Alongside it, media and marketing for TEDxFASTIslamabad, and HR Director for Isaar.",
         tags: ['NaSCon', 'Event Management', 'TEDx', 'HR'],
         link: null,
       },
@@ -243,15 +248,20 @@ export const episodes = [
         link: 'https://github.com/rayyan-41/EduGap_Curriculum-Job-Listings-Gap-Identifier',
       },
       {
-        // The only outright win on the whole site. Deliberately states the
-        // placement and nothing about the build: the finale project has not
-        // been recorded here yet, and a panel that guessed at one would be
-        // the exact failure mode src/data/CLAUDE.md warns about.
+        // The only outright win on the whole site. This panel used to state
+        // the placement and NOTHING about the build, because the finale
+        // project was not on record and a guess would have been the exact
+        // failure mode src/data/CLAUDE.md warns about. The gap is now
+        // closed: the repo is rayyan-41/pokayoke, read directly.
+        //
+        // The closing sentence names the contribution split for the same
+        // reason EDUGAP and TAXNET do: he has one commit in that repo and
+        // it is the plan document. Do not rewrite it into "built".
         header: 'THE NATIONAL FINAL',
         timestamp: '2026',
-        body: 'The regional result put the team among the last ten in the country, and the national final of atomcamp’s National AI Hackathon ended in first place. Every other entry on this page is a near-miss of some size. This is the one that was won outright.',
-        tags: ['National Final', 'First Place', 'atomcamp'],
-        link: null,
+        body: 'The national final of atomcamp’s National AI Hackathon, won outright on a problem statement set by S&P Global. PokaYoke is an agentic QA layer that stops bad records before they reach a database, every finding required to cite evidence from a deterministic tool. The problem framing, the stack, the evaluation design and the pitch were mine.',
+        tags: ['Agents', 'First Place', 'Architecture', 'Pitch'],
+        link: 'https://github.com/rayyan-41/pokayoke',
       },
       {
         header: 'TAXNET, ONE GRAPH',

@@ -76,7 +76,7 @@ export const profile = {
       institution: 'FAST-NUCES, Islamabad',
       timespan: 'Aug 2024 to 2028 (expected)',
       detail:
-        'Cumulative CGPA 3.96/4.00, ranked 1st in a cohort of 313. Perfect 4.00 SGPA in Fall 2025 (Rector’s List). 73 credit hours as of Spring 2026; currently in the fifth semester.',
+        'Cumulative CGPA 3.96/4.00, ranked 1st in a cohort of 313. Four top-of-semester medals so far: two gold, two silver. Perfect 4.00 SGPA in Fall 2025 (Rector’s List). 73 credit hours as of Spring 2026; currently in the fifth semester.',
       coursework:
         'Artificial Intelligence (A+), Software Design & Analysis (A+), Theory of Automata (A+), Discrete Structures (A+), Computer Organization & Assembly Language (A), Data Structures (A), Operating Systems (A), Linear Algebra (A), Probability & Statistics (A), Database Systems (A−). In progress (Fall 2026): Design & Analysis of Algorithms, Computer Networks, Computer Architecture, Applied Human-Computer Interaction, Technical & Business Writing.',
     },
@@ -140,7 +140,8 @@ export const profile = {
     'Gold Medal, Fall 2025: 1st position, perfect 4.00 SGPA (Rector’s List).',
     'Gold Medal, Fall 2024: top academic performance.',
     'Silver Medal, Spring 2025: top academic performance.',
-    '1st place, National Finale, atomcamp National AI Hackathon ’26 (top 10 teams in Pakistan).',
+    'Silver Medal, Spring 2026: top academic performance. Four medals in total.',
+    '1st place, National Finale, atomcamp National AI Hackathon ’26: top 10 teams in Pakistan, PKR 100,000, on a problem statement set by S&P Global.',
     '2nd place, Islamabad regional round, atomcamp National AI Hackathon ’26 (EduGap, 100 teams).',
     '2nd place, HackSummer’26 (Microsoft Club-GIKI & Canva Community GIKI).',
     'Top four, Barani Hackathon ’26.',
@@ -185,7 +186,7 @@ export const profile = {
       org: "NaSCon, FAST-NUCES",
       timespan: "Feb 2026 to present",
       detail:
-        "Event Head for Speed Programming at Pakistan’s largest student-run computing competition, held 18 October 2026: 99 teams and 270 registered participants competing for a 150,000 rupee prize pool. Set the problem sets and rules, briefed a sixteen-person volunteer panel, coordinated sponsors and judges, and ran the floor through a network failure on the day. Event Head for C++ FaceOff at the same competition from February to July 2026.",
+        "Event Head for Speed Programming at Pakistan’s largest student-run computing competition, held 18 October 2026: 99 teams and 270 registered participants competing for a 150,000 rupee prize pool. Set the problem sets and rules, briefed a sixteen-person volunteer panel, coordinated sponsors and judges, and ran the floor through a network failure on the day. Originally appointed Event Head for C++ FaceOff in February 2026 and moved to Speed Programming, a larger event, in July when NaSCon was delayed.",
     },
     {
       role: 'Director of Human Resources',
@@ -209,11 +210,17 @@ export const profile = {
         'Discord server administrator since Jul 2024; content coordination intern Jun to Sep 2025. Moderated user-generated content and enforced community guidelines; mediated disputes; organized community events including a PSL Predictor Challenge; relayed user feedback into UX suggestions.',
     },
     {
-      role: 'Buddy Program Teacher',
+      role: 'Buddy Program Chairperson (prev. Buddy Program Teacher)',
       org: 'FAST Computing Society',
-      timespan: 'Oct 2025 to Jun 2026',
+      timespan: 'Oct 2025 to present',
       detail:
-        'Paired with junior students to re-teach CS courses already passed: weekly problem sessions on programming fundamentals and data structures, plus exam-prep walkthroughs.',
+        'Now chairs the peer-teaching programme joined as a tutor in October 2025. As a teacher through June 2026: paired with junior students to re-teach CS courses already passed, running weekly problem sessions on programming fundamentals and data structures plus exam-prep walkthroughs.',
+    },
+    {
+      role: 'Secretary PR',
+      org: 'FAST Society of Innovation in Mathematics and Theoretical Science (SIMT)',
+      timespan: 'Current',
+      detail: 'Public relations for the mathematics and theoretical science society.',
     },
   ],
 

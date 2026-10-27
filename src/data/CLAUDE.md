@@ -58,8 +58,85 @@ instead.
   `eventDay` `NASCON` beat had to move together). A beat that cannot be
   traced back is the game surface inventing a credential — the one
   failure this project cannot absorb.
-- **Role honesty is content, not tone.** EduGap and TaxNet were team
-  builds where the contribution was design input and the winning pitch,
-  not the engineering; the master resume says so in as many words and the
-  panels now say so too. Do not rewrite those closing sentences into
-  something punchier that reclaims authorship.
+- **Role honesty is content, not tone.** EduGap, TaxNet **and now
+  PokaYoke** were team builds where the contribution was design input,
+  planning and the winning pitch, not the engineering; the master resume
+  says so in as many words and the panels now say so too. Do not rewrite
+  those closing sentences into something punchier that reclaims
+  authorship.
+- **The fuller record now lives in [`../../profile/`](../../profile/CLAUDE.md),
+  not in this folder.** That directory is the career knowledge base: the
+  complete role/date/grade record, a repo inventory with measured commit
+  attribution, the full competition record, an application kit, and an
+  open-questions list. This folder stays the *website's* curated,
+  length-constrained cut. When a fact changes it changes in `profile/`
+  first, then here if the site renders it. If the two disagree,
+  `profile/` is right and this folder is stale.
+
+## This batch — the National Finale project was identified
+
+`episodes.js`'s `THE NATIONAL FINAL` panel carried a comment saying the
+finale project was not on record and that a panel guessing at one would be
+the exact failure this folder exists to prevent. **That gap is closed.** The
+project is **PokaYoke** (repo `rayyan-41/pokayoke`, public; its README
+titles it "PS-08 QA Agent" after the problem statement), read directly from
+the repository rather than from memory.
+
+What it is: an automated data QA layer that sits in front of a database and
+stops bad data before it is written. A Gemini agent on Google ADK plans
+which checks a given field needs, calls deterministic Python tools to find
+the evidence, and **a reviewer step drops any finding the tools cannot
+support** — which is the design decision worth carrying, because it is what
+makes it defensible rather than a chatbot. FastAPI on Cloud Run, Firestore
+for the analyst-feedback loop, a React console plus an HTML fallback UI.
+
+The panel body now names the project and the architecture idea, and closes
+on the contribution split — **he has exactly one commit in that repository
+and it is the 159-line stack-and-build-plan document** (`docs/team/
+PlanWRTJudges(notFinal).md`, written about four hours before submission),
+alongside owning the problem narrative, the SOP library, the synthetic
+evaluation set, the prompt-injection testing and the 7-minute pitch. Teammates
+Rayyan Ahmad Sultan (product UI) and Ibtasaam Amjad (backend, agent, GCP)
+did the engineering. The panel's in-file comment was rewritten to record
+this rather than deleted, same pattern as the C++ FaceOff restoration above.
+`games.js`'s `fortyEight` `HOUR 48` beat now names PokaYoke too, per the
+beats-trace-to-a-panel rule. Panel total unchanged at **20** — this rewrote a
+panel rather than adding one. All bodies re-verified 30–60 words, headers
+2–5, subtitles ≤60 chars, every `choices[].target` resolving.
+
+`profile.js` also gained **two new concurrent society roles** reported
+directly by the user: **Buddy Program Chairperson at FAST Computing
+Society** (the existing Buddy Program Teacher entry became this, with the
+tutor period kept in the detail — participant to tutor to chairperson of the
+same programme is one arc, not two entries) and **Secretary PR at FAST SIMT**
+(the Society of Innovation in Mathematics and Theoretical Science). The SIMT
+entry is deliberately one short line: its start date and remit are not known
+yet and are logged in `profile/open-questions.md`. `experience[]` is now 10
+entries. `highlights[]` is untouched — it is hardcoded `sm:grid-cols-4` in
+`PlainResume.jsx`, so four is a count, not a preference.
+
+**A live LinkedIn read in the same batch produced three further corrections**
+(see the root `CLAUDE.md` §10 for the full account). **A fourth medal exists**
+— Silver, Spring 2026 — and the three places that said "two golds, one silver"
+(`episodes.js`'s education panel, `profile.js`'s `education[]`/`awards[]`,
+`games.js`'s `GOLD, AGAIN` beat) now all say four. **PokaYoke was built to a
+problem statement written by S&P Global** and first prize was **PKR 100,000**;
+both are now in `THE NATIONAL FINAL` and in `awards[]`. **NaSCon Speed
+Programming began in July 2026**, not February, which was the C++ FaceOff post.
+
+**A fourth correction, and it is the second time this fact has moved:
+NaSCon was ONE role, not two events delivered.** Direct report: he was
+appointed Head of **C++ FaceOff** in February and was **moved to Speed
+Programming, a larger event, in July** when NaSCon was delayed. An earlier
+pass deleted FaceOff as unverified; the LinkedIn pass that restored it then
+over-corrected into *"Ran C++ FaceOff for the same event earlier that year"*,
+claiming a second delivered event that never happened. The `EVENT HEAD,
+NASCON` panel now says "Moved there from the smaller C++ FaceOff when NaSCon
+was delayed", `profile.js`'s detail names the February appointment and the
+July move, and `games.js`'s `NASCON` beat follows. **The panel's in-file
+comment records both wrong wordings** so the next pass reaches for neither.
+
+Verified: all panel bodies still 30–60 words, headers 2–5, subtitles ≤60
+characters, every `choices[].target` resolving; `npm run lint` clean
+(pre-existing warnings only, none in a touched file), `npm run build` clean at
+**180.92 KB gzipped JS** / 10.02 KB CSS, `npm run verify:scenes` ALL PASSED.

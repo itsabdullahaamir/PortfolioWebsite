@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# The career knowledge base: local-only on purpose. This repo is PUBLIC and
+# its README/portfolio link invites recruiters to clone it, while profile/ is
+# a candid strategy document (self-assessed weaknesses, what to downplay per
+# employer, measured commit attribution). Claude Code reads it off disk, so it
+# never needs to be committed. See the root CLAUDE.md section 10.
+profile/
